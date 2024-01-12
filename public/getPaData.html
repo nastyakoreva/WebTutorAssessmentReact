@@ -1,0 +1,19 @@
+<%
+Request.AddRespHeader( "Access-Control-Allow-Origin", "http://localhost:3000" ); 
+Request.AddRespHeader( "Access-Control-Allow-Credentials", "true" ); 
+Request.AddRespHeader( "Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,PATCH,OPTIONS" );
+Request.AddRespHeader( "Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers" );
+
+pa_id = OptInt(Request.QueryString.GetOptProperty("pa_id"));
+pa = ArrayOptFirstElem(XQuery("for $elem in pas where $elem/id = "+pa_id+" return $elem"));
+pa_doc = (pa_id != undefined && tools.open_doc(pa_id) != undefined) ? tools.open_doc(pa_id).TopElem : null;
+//alert(tools.object_to_text(pa_doc,'json'));
+
+result = {
+    pa: pa,
+    pa_doc: pa_doc
+};
+
+
+Response.Write(tools.object_to_text(result, 'json'));
+%>

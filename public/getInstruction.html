@@ -1,0 +1,16 @@
+<%
+Request.AddRespHeader( "Access-Control-Allow-Origin", "http://localhost:3000" ); 
+ Request.AddRespHeader( "Access-Control-Allow-Credentials", "true" ); 
+ Request.AddRespHeader( "Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,PATCH,OPTIONS" );
+ Request.AddRespHeader( "Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers" );
+
+hr_instDoc = tools.open_doc(7317546197147546873);
+hr_inst = hr_instDoc.TopElem.text_area;
+
+result = {
+    content: hr_inst
+};
+
+
+Response.Write(EncodeJson(result));
+%>

@@ -1,0 +1,29 @@
+.item {
+    background-color: #fff;
+    color: #22272b;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    padding: 0px 20px;
+    align-items: center;
+    .user {
+        display: flex;
+        flex-direction: row;
+        flex-grow: 1;
+        align-items: center;
+        margin: 5px 0px;
+        .avatar {
+            width: 45px;
+            height: 45px;
+        }
+        .userdata {
+            display: flex;
+            flex-direction: column;
+            padding-left: 10px;
+            .position {
+                font-style: italic;
+                font-size: 14px;
+            }
+        }
+    }
+}

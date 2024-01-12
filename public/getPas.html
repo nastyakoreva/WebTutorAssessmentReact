@@ -1,0 +1,51 @@
+<%
+Request.AddRespHeader( "Access-Control-Allow-Origin", "http://localhost:3000" ); 
+ Request.AddRespHeader( "Access-Control-Allow-Credentials", "true" ); 
+ Request.AddRespHeader( "Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,PATCH,OPTIONS" );
+ Request.AddRespHeader( "Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers" );
+
+Env = Request.Session.Env;
+curUserID = Env.GetOptProperty("curUserID", null);
+
+appr_id = 7170302049664239328;
+
+
+cacheUsers = {};
+
+var pas = XQuery("for $elem in pas where $elem/assessment_appraise_id = "+appr_id+" and $elem/expert_person_id = "+curUserID+" return $elem");
+
+result = {};
+result.pas = [];
+for(pa in pas) {
+	//docPa = tools.open_doc(pa.id).TopElem;
+
+	if(!cacheUsers.HasProperty(pa.person_id)) {
+    	userDoc = tools.open_doc(pa.person_id).TopElem;
+    	cacheUsers[pa.person_id] = { pict_url: userDoc.pict_url };
+    }
+    if(pa.assessment_appraise_type == 'activity_appraisal') {
+	obj = {
+		id: String(pa.id),
+		name: pa.person_fullname,
+		position: pa.person_position_name,
+        icon_url: cacheUsers[pa.person_id].pict_url,
+		type: pa.assessment_appraise_type,
+		status: pa.status,
+		workflow_state: pa.workflow_state,
+        is_done: pa.is_done
+	};
+	
+	result.pas.push(obj);
+    }
+}
+//alert( tools.object_to_text( result, "json" ) );
+
+docAssessmentUser = tools.open_doc(curUserID).TopElem;
+result.assessment_user = {
+	id: String(curUserID),
+	position: docAssessmentUser.position_name,
+	pict_url: docAssessmentUser.pict_url
+};
+
+Response.Write(EncodeJson(result));
+%>

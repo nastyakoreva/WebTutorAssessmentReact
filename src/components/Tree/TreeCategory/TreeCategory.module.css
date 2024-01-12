@@ -1,0 +1,32 @@
+.category {
+    display: flex;
+    flex-direction: column;
+    background-color: #22272b;
+    width: 90%;
+    border-radius: 15px;
+    overflow: hidden;
+    margin: 10px 0px 10px 0px;
+    .header {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        color: #ddedf5;
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin: 0.8rem 1.2rem 0.8rem 1.2rem;
+        .expand_icon {
+            background-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='iso-8859-1'%3F%3E%3C!-- Uploaded to: SVG Repo  www.svgrepo.com  Generator: SVG Repo Mixer Tools --%3E%3Csvg fill='%23ddedf5' height='400px' width='400px' version='1.1' id='Layer_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'  viewBox='0 0 330 330' xml:space='preserve'%3E%3Cpath id='XMLID_222_' d='M250.606 154.389l-150-149.996c-5.857-5.858-15.355-5.858-21.213 0.001c-5.857 5.858-5.857 15.355 0.001 21.213l139.393 139.39L79.393 304.394c-5.857 5.858-5.857 15.355 0.001 21.213C82.322 328.536 86.161 330 90 330s7.678-1.464 10.607-4.394l149.999-150.004c2.814-2.813 4.394-6.628 4.394-10.606C255 161.018 253.42 157.202 250.606 154.389z'/%3E%3C/svg%3E");
+            width: 24px;
+            height: 24px;
+            background-size: 24px 24px;
+            background-repeat: no-repeat;
+            background-position: center center;
+            margin: 5px 10px 5px 5px;
+        }
+        .expand_icon[expanded="true"] {
+            -webkit-transform: rotate(90deg);
+            -ms-transform: rotate(90deg);
+            transform: rotate(90deg);
+        }
+    }
+}
