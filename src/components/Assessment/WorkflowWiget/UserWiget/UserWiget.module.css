@@ -1,0 +1,16 @@
+.UserWiget {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    .avatar {
+        width: 45px;
+        height: 45px;
+    }
+    .userdata {
+        padding-left: 10px;
+        .position {
+            font-style: italic;
+            font-size: 14px;
+        }
+    }
+}
