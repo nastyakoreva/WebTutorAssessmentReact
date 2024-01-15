@@ -14,9 +14,7 @@ const TreeItem = (props) => {
                 </div>
             </div>
             <Button callback={()=>{props.getPa(props.item.pa.id)}}
-                   btnClass={'dark'}>{props.item.btn_text} </Button>
-            {/* <div onClick={()=>{props.getPa(props.item.pa.id)}}>{props.item.btn_text}</div> */}
-                
+                   btnClass={'dark'}>{props.item.btn_text} </Button>                
         </div>
     )
 }
