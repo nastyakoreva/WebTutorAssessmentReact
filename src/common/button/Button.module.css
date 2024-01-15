@@ -1,0 +1,27 @@
+.btn{
+    font-size: var(--font-size-18);
+    font-weight: var( --font-weight-600);
+    padding: 8px 32px;
+    border-radius: 8px;
+    max-width: 360px;
+    color:var(--color-light-100);
+    border: none;
+}
+.default{
+    color: var(--color-dark-700);
+}
+.dark{
+    background-color: var( --color-dark-700);
+}
+.info{
+    background-color:var(--color-info-100);
+}
+.danger{
+    background-color:var(--color-danger-500);
+}
+.base{
+    background-color:var(--color-base-100);
+}
+.success{
+    background-color:var(--color-success-100);
+}
