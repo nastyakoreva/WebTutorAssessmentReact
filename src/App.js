@@ -4,7 +4,9 @@ import TreeContainer from "./components/Tree/TreeContainer";
 import {connect} from "react-redux";
 import {initializeApp} from "./redux/app-reducer";
 import AssessmentContainer from "./components/Assessment/AssessmentContainer";
+import Header from "./components/Header/Header";
 import './common/styles/index.module.css'
+
 class App extends React.Component {
 
   componentDidMount() {
@@ -14,14 +16,17 @@ class App extends React.Component {
   }
 
   render() {
-    console.log('app');
-    console.log(this.props);
+
       if(!this.props.initialized) {
           console.log('preload');
           return <Preloader/>
       }
       return (
           <div className='app-wrapper'>
+              <Header assessment_name={this.props.assessment_name}
+                      assessment_date_start={this.props.assessment_date_start}
+                      assessment_date_end={this.props.assessment_date_end}
+                      assessment_user={this.props.assessment_user}/>
               {this.props.current_pa === 'tree' && <TreeContainer/>}
               {this.props.current_pa !== null && this.props.current_pa !== 'tree' && <AssessmentContainer/>}
           </div>
@@ -31,7 +36,11 @@ class App extends React.Component {
 
 const mapStateToProps = (state) => ({
   initialized: state.app.initialized,
-  current_pa: state.app.current_pa
+  current_pa: state.app.current_pa,
+  assessment_name: state.tree.assessment_name,
+  assessment_date_start: state.tree.assessment_date_start,
+  assessment_date_end: state.tree.assessment_date_end,
+  assessment_user: state.tree.assessment_user
 })
 
 export default connect(mapStateToProps, {initializeApp})(App);
