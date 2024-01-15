@@ -13,8 +13,11 @@ const TreeItem = (props) => {
                     <div className={css.position}>{props.item.pa.position}</div>
                 </div>
             </div>
-            <Button callback={()=>{props.getPa(props.item.pa.id)}}
-                   btnClass={'dark'}>{props.item.btn_text} </Button>                
+            {/*<Button callback={()=>{props.getPa(props.item.pa.id)}}
+                   btnClass={'dark'}>{props.item.btn_text} </Button>   */} 
+                    { props.item.btn_active && <div className={css.button} onClick={()=>{props.getPa(props.item.pa.id)}}>{props.item.btn_text}</div> }
+                    { !props.item.btn_active && <div className={css.tooltip}><div className={css.info_icon}/>{props.item.btn_text}</div> }
+                            
         </div>
     )
 }

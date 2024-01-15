@@ -6,6 +6,7 @@ let initialState = {
     instructionContent: "",
     pas: [],
     assessment_user: null,
+    workflow_states: []
 }
 
 const treeReducer = (state = initialState, action) => {
@@ -15,8 +16,12 @@ const treeReducer = (state = initialState, action) => {
             return {
                 ...state,
                 pas: action.data.pas,
+                assessment_name: action.data.assessment_name,
+                assessment_date_start: action.data.assessment_date_start,
+                assessment_date_end: action.data.assessment_date_end,
                 assessment_user: action.data.assessment_user,
-                instructionContent: action.data.instruction
+                instructionContent: action.data.instruction,
+                workflow_states: action.data.workflow_states
             }
         default:
             return state;

@@ -6,13 +6,66 @@ Request.AddRespHeader( "Access-Control-Allow-Headers", "Access-Control-Allow-Hea
 
 pa_id = OptInt(Request.QueryString.GetOptProperty("pa_id"));
 pa = ArrayOptFirstElem(XQuery("for $elem in pas where $elem/id = "+pa_id+" return $elem"));
-pa_doc = (pa_id != undefined && tools.open_doc(pa_id) != undefined) ? tools.open_doc(pa_id).TopElem : null;
-//alert(tools.object_to_text(pa_doc,'json'));
+
+pa_doc = tools.open_doc(pa_id);
+pa_doc = pa_doc != undefined ? pa_doc.TopElem : null; 
+
+plan = ArrayOptFirstElem(XQuery("for $elem in assessment_plans where $elem/id = "+pa.assessment_plan_id+" return $elem"));
+boss = ArrayOptFirstElem(XQuery("for $elem in collaborators where $elem/id = "+plan.boss_id+" return $elem"));
 
 result = {
     pa: pa,
-    pa_doc: pa_doc
+    pa_doc: pa_doc,
+    plan: plan,
+    boss: {
+        boss_id: String(boss.id),
+        fullname: String(boss.fullname),
+	    position: String(boss.position_name),
+        pict_url: String(boss.pict_url)
+    }
 };
+
+expert_id = ArrayOptFirstElem(plan.custom_experts_array);
+if(expert_id != undefined) {
+    expert = ArrayOptFirstElem(XQuery("for $elem in collaborators where $elem/id = "+expert_id+" return $elem"));
+    result.expert = {
+        expert_id: String(expert_id),
+        fullname: String(expert.fullname),
+	    position: String(expert.position_name),
+        pict_url: String(expert.pict_url)
+    }
+}
+else {
+    result.expert = null;
+}
+
+if(plan.expert_person_id != null) {
+    hr = ArrayOptFirstElem(XQuery("for $elem in collaborators where $elem/id = "+plan.expert_person_id+" return $elem"));
+    result.hr = {
+        hr_id: String(plan.expert_person_id),
+        fullname: String(hr.fullname),
+	    position: String(hr.position_name),
+        pict_url: String(hr.pict_url)
+    }
+}
+else {
+    result.hr = null;
+}
+
+
+competence_scales = [];
+if(pa_doc.competences.competence != undefined && IsArray(pa_doc.competences.competence)) {
+    for(pa_comp in pa_doc.competences.competence) {
+        competence_doc = tools.open_doc(pa_comp.competence_id);
+        if(competence_doc != undefined) {
+            competence_scales.push(competence_doc.TopElem);
+            
+
+            //alert(tools.object_to_text(competence_doc,'json'));
+        }
+    }
+}
+result.competence_scales = competence_scales;
 
 
 Response.Write(tools.object_to_text(result, 'json'));

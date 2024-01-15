@@ -7,6 +7,11 @@ const SET_ASSESSMENT_ANSWER = 'SET_ASSESSMENT_ANSWER';
 let initialState = {
     pa: null,
     pa_doc: null,
+    plan: null,
+    boss: null,
+    expert: null,
+    hr: null,
+    competence_scales: [],
     error: null,
     //assessment_user: null,
     sid: null
@@ -20,6 +25,11 @@ const assessmentReducer = (state = initialState, action) => {
                 ...state,
                 pa: action.data.pa,
                 pa_doc: action.data.pa_doc,
+                plan: action.data.plan,
+                boss: action.data.boss,
+                expert: action.data.expert,
+                hr: action.data.hr,
+                competence_scales: action.data.competence_scales,
                 //error: action.data.error,
                 //sid: action.data.sid
             }

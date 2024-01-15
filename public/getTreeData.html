@@ -8,7 +8,7 @@ Env = Request.Session.Env;
 curUserID = Env.GetOptProperty("curUserID", null);
 
 appr_id = OptInt(Request.QueryString.GetOptProperty("assessment_id"));
-
+alert ('appr_id '+ appr_id);
 if(appr_id == undefined) {  //dev
 	appr_id = 7317539110934923736;//7272351897821058257; 
 }
@@ -48,9 +48,23 @@ for(pa in pas) {
 docAssessmentUser = tools.open_doc(curUserID).TopElem;
 result.assessment_user = {
 	id: String(curUserID),
+	fullname: docAssessmentUser.lastname + ' ' + docAssessmentUser.firstname + ' ' + docAssessmentUser.middlename,
 	position: docAssessmentUser.position_name,
 	pict_url: docAssessmentUser.pict_url
 };
+
+docAppr = tools.open_doc(appr_id).TopElem;
+result.assessment_name = docAppr.name;
+result.assessment_date_start = StrDate(docAppr.start_date, false);
+result.assessment_date_end = StrDate(docAppr.end_date, false);
+
+result.workflow_states = [];
+if(docAppr.workflow_id != undefined) {
+	docWorkflow = tools.open_doc(docAppr.workflow_id).TopElem;
+	for(state in docWorkflow.states) {
+		result.workflow_states.push({ code: state.code, name: state.name });
+	}
+}
 
 hr_instDoc = tools.open_doc(7317546197147546873);
 result.instruction = (hr_instDoc != undefined) ? hr_instDoc.TopElem.text_area : null;

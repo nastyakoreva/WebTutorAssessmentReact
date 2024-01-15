@@ -7,6 +7,12 @@ let mapStateToProps = (state) => {
     return {
         pa: state.assessment.pa,
         pa_doc: state.assessment.pa_doc,
+        plan: state.assessment.plan,
+        workflow_states: state.tree.workflow_states,
+        boss: state.assessment.boss,
+        expert: state.assessment.expert,
+        hr: state.assessment.hr,
+        competence_scales: state.assessment.competence_scales
     }
 }
 

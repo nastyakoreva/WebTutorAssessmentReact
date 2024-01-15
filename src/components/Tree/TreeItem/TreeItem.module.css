@@ -25,5 +25,36 @@
                 font-size: 14px;
             }
         }
+
+    }
+    .button {
+        background-color: #22272b;
+        color: #ddedf5;
+        width: 250px;
+        border-radius: 10px;
+        overflow: hidden;
+        text-align: center;
+        padding: 8px;
+        cursor: pointer;
+    }
+    .tooltip {
+        display: flex;
+        flex-direction: row;
+        background-color: #ffea9d;
+        color: #22272b;
+        width: 400px;
+        border-radius: 15px;
+        overflow: hidden;
+        padding: 5px;
+        cursor: default;
+        .info_icon {
+            background-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='utf-8'%3F%3E%3Csvg width='800px' height='800px' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg' fill='none'%3E%3Cpath stroke='%23000000' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M11 11h1v5.5m0 0h1.5m-1.5 0h-1.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9.5-4v-.5h.5V8h-.5Z'/%3E%3C/svg%3E");
+            width: 20px;
+            height: 20px;
+            background-size: 20px 20px;
+            background-repeat: no-repeat;
+            background-position: center center;
+            margin: 10px;
+        }
     }
 }

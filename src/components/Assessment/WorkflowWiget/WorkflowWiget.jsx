@@ -27,9 +27,13 @@ const WorkflowWiget = (props) => {
             </div>
             <div className={css.experts}>
                 <ul>
-                    <li><UserWiget fullname={props.pa.person_fullname} position='Оцениваемый' /></li>
-                    <li><UserWiget fullname={props.pa.expert_person_fullname} position='Оценивающий' /></li>
-                    {/*<li><UserWiget fullname={props.hr.fio} position={props.hr.position} /></li>*/}
+                    <li><UserWiget fullname={props.pa.person_fullname} position={props.pa.person_position_name} role='Оцениваемый' /></li>
+                    {props.boss &&
+                    <li><UserWiget fullname={props.boss.fullname} position={props.boss.position} avatar={props.boss.pict_url} role='Оценивающий руководитель' /></li>}
+                    {props.expert &&
+                    <li><UserWiget fullname={props.expert.fullname} position={props.expert.position} avatar={props.expert.pict_url} role='Согласующий руководитель' /></li>}
+                    {props.hr &&
+                    <li><UserWiget fullname={props.hr.fullname} position={props.hr.position} avatar={props.hr.pict_url} role='HR' /></li>}
                 </ul>
             </div>
         </div>
