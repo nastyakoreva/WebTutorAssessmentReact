@@ -4,7 +4,7 @@ import TreeContainer from "./components/Tree/TreeContainer";
 import {connect} from "react-redux";
 import {initializeApp} from "./redux/app-reducer";
 import AssessmentContainer from "./components/Assessment/AssessmentContainer";
-
+import './common/styles/index.module.css'
 class App extends React.Component {
 
   componentDidMount() {

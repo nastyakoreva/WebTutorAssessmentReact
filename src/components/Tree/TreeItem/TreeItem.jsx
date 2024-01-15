@@ -1,5 +1,6 @@
 import React from "react";
 import css from "./TreeItem.module.css"
+import { Button } from "../../../common/button/Button";
 
 const TreeItem = (props) => {
     let a = props.item.btn_active;
@@ -12,7 +13,9 @@ const TreeItem = (props) => {
                     <div className={css.position}>{props.item.pa.position}</div>
                 </div>
             </div>
-            <div onClick={()=>{props.getPa(props.item.pa.id)}}>{props.item.btn_text}</div>
+            <Button callback={()=>{props.getPa(props.item.pa.id)}}
+                   btnClass={'dark'}>{props.item.btn_text} </Button>
+            {/* <div onClick={()=>{props.getPa(props.item.pa.id)}}>{props.item.btn_text}</div> */}
                 
         </div>
     )
