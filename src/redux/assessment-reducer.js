@@ -2,7 +2,7 @@ import {assessmentAPI} from "../api/api";
 import {setAppCurentPaAC} from "./app-reducer";
 
 const SET_ASSESSMENT_PA = 'SET_ASSESSMENT_PA';
-const SET_ASSESSMENT_ANSWER = 'SET_ASSESSMENT_ANSWER';
+const SET_ASSESSMENT_COMPETENCE = 'SET_ASSESSMENT_COMPETENCE';
 
 let initialState = {
     pa: null,
@@ -33,12 +33,34 @@ const assessmentReducer = (state = initialState, action) => {
                 //error: action.data.error,
                 //sid: action.data.sid
             }
-        /*case SET_ASSESSMENT_ANSWER:
+        case SET_ASSESSMENT_COMPETENCE:
             return {
                 ...state,
+                pa_doc: {
+                    ...state.pa_doc,
+                    competences: {
+                        ...state.pa_doc.competences,
+                        competence: state.pa_doc.competences.competence.map((comp) => {
+                            for(let wt_answer of action.data.wt_answer) {
+                                if(comp.competence_id === wt_answer.comp_id) {
+                                    if(wt_answer.mark !== undefined) {
+                                        comp.mark = wt_answer.mark;
+                                    }
+                                    if(wt_answer.comment !== undefined) {
+                                        comp.comment = wt_answer.comment;
+                                    }
+                                }
+                            }
+                            return comp;
+                        })
+                    }
+                }
+
+
+/*
                 pas: state.pas.map((pa) => {
-                    for(let answer of action.data.answer) {
-                        if(pa.id===answer.pa && pa.question===answer.question) {
+                    for(let answer of action.data.wt_answer) {
+                        if(pa.id===answer.pa_id && pa.question===answer.question) {
                             pa.mark.value = answer.value;
                         }
                         if(pa.id===answer.pa && pa.question2 !== undefined 
@@ -47,15 +69,15 @@ const assessmentReducer = (state = initialState, action) => {
                         }
                     }
                     return pa;
-                })
-            }*/
+                })*/
+            }
         default:
             return state;
     }
 }
 
 const setAssessmentPa = (data) => ({ type: SET_ASSESSMENT_PA, data });
-//const setAssessmentAnswer = (data) => ({ type: SET_ASSESSMENT_ANSWER, data });
+const setAssessmentCompetence = (data) => ({ type: SET_ASSESSMENT_COMPETENCE, data });
 
 export const getAssessmentPa = (pa_id) => (dispatch) => {
     assessmentAPI.getPaData(pa_id).then(response => {
@@ -64,21 +86,36 @@ export const getAssessmentPa = (pa_id) => (dispatch) => {
     }).then( () => { dispatch(setAppCurentPaAC(pa_id)) } ) 
 }
 
-export const sendAnswer = (answer) => (dispatch) => {
+export const sendCompetence = (data) => (dispatch) => {
     //debugger;
-    console.log(answer);
-    const answerMessage = {
-        mode: "put",
-        answer: {
-            pa: answer.name,
-            question: answer.attributes['question'].value,
-            value: answer.value
+    console.log(data);
+    console.log(data.attributes['role'].value);
+    let outputMessage = {};
+    if(data.attributes['role'].value === 'mark') {
+        outputMessage = {
+            mode: "put",
+            competence_mark: {
+                pa_id: data.name,
+                comp_id: data.attributes['comp_id'].value,
+                value: data.value,
+                mark_text: data.title
+            }
         }
     }
-    assessmentAPI.sendAnswer(answerMessage).then(response => {
-        console.log(answerMessage);
+    if(data.attributes['role'].value === 'comment') {
+        outputMessage = {
+            mode: "put",
+            competence_comment: {
+                pa_id: data.name,
+                comp_id: data.attributes['comp_id'].value,
+                comment: data.value,
+            }
+        }
+    }
+    assessmentAPI.sendCompetence(outputMessage).then(response => {
+        console.log(outputMessage);
         if(response.data.status === 1) {
-            //dispatch(setAssessmentAnswer(response.data));
+            dispatch(setAssessmentCompetence(response.data));
         }
         else if(response.data.status === 0) {
             alert(response.data.comment);
@@ -89,9 +126,6 @@ export const sendAnswer = (answer) => (dispatch) => {
         }
         if (error.response.status === 500) {
             alert("Ошибка");
-            /*assessmentAPI.getAssessmentData2().then(response => {
-                dispatch(setAssessmentData(response));
-            })*/
         }
         return error;
     })

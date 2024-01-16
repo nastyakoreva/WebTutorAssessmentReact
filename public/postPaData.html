@@ -1,0 +1,96 @@
+<%
+Request.AddRespHeader( "Access-Control-Allow-Origin", "http://localhost:3000" ); 
+ Request.AddRespHeader( "Access-Control-Allow-Credentials", "true" ); 
+ Request.AddRespHeader( "Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,PATCH,OPTIONS" );
+ Request.AddRespHeader( "Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers" );
+
+Env = Request.Session.Env;
+curUserID = Env.GetOptProperty("curUserID", null);
+//curUser = Env.GetOptProperty("curUser", null);
+alert('curUserID ' + tools.object_to_text( curUserID, "json" ));
+
+
+result = {};
+status = 1;
+comment = '';
+wt_answer = [];
+xmlBody = ParseJson( Request.Body );
+alert('xmlBody ' + tools.object_to_text( xmlBody, "json" ));
+if(xmlBody != null && xmlBody.data != null && xmlBody.data.mode == "put" && (xmlBody.data.HasProperty("competence_mark") || xmlBody.data.HasProperty("competence_comment"))) {
+	//значение в компетенцию
+    if(xmlBody.data.HasProperty("competence_mark")) {
+        pa_id = xmlBody.data.competence_mark.pa_id;
+        comp_id = xmlBody.data.competence_mark.comp_id;
+        value = xmlBody.data.competence_mark.value;
+        mark_text = xmlBody.data.competence_mark.mark_text;
+
+        docPa = tools.open_doc(pa_id);
+        
+        //безопасность нужна?
+        //if(docPa.expert_person_id == curUserID).. ?
+
+        if(docPa != undefined) { 
+            var competences = ArraySelect(docPa.TopElem.competences.competence, "competence_id == "+comp_id)
+            if(competences.length > 0) {
+                competences[0].mark = value;
+                competences[0].mark_text = mark_text;
+                wt_answer.push({
+                    pa_id: pa_id,
+                    comp_id: comp_id,
+                    mark: value
+                });
+                docPa.Save();
+            }
+            else {
+                status = 0;
+                comment = 'Нет компетенции в указанном PA';
+            }
+        }
+        else {
+            status = 0;
+            comment = 'Нет указанной PA';
+        }
+    }
+
+    //коммент в компетенцию
+    if(xmlBody.data.HasProperty("competence_comment")) {
+        pa_id = xmlBody.data.competence_comment.pa_id;
+        comp_id = xmlBody.data.competence_comment.comp_id;
+        comment = xmlBody.data.competence_comment.comment;
+
+        docPa = tools.open_doc(pa_id);
+
+        if(docPa != undefined) { 
+            var competences = ArraySelect(docPa.TopElem.competences.competence, "competence_id == "+comp_id)
+            if(competences.length > 0) {
+                competences[0].comment = comment;
+                wt_answer.push({
+                    pa_id: pa_id,
+                    comp_id: comp_id,
+                    comment: comment
+                });
+                docPa.Save();
+            }
+            else {
+                status = 0;
+                comment = 'Нет компетенции в указанном PA';
+            }
+        }
+        else {
+            status = 0;
+            comment = 'Нет указанной PA';
+        }
+    }
+
+}
+else {
+	status = 0;
+	comment = 'Ошибка в структуре сообщения';
+}
+
+result.status = status;
+result.wt_answer = wt_answer;
+result.comment = comment;
+
+Response.Write( tools.object_to_text( result, "json" ) );
+%>

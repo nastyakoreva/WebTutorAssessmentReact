@@ -2,6 +2,7 @@ import {compose} from "redux";
 import {connect} from "react-redux";
 import Assessment from "./Assessment";
 import {setAppCurentPaAC} from "../../redux/app-reducer";
+import { sendCompetence } from "../../redux/assessment-reducer";
 
 let mapStateToProps = (state) => {
     return {
@@ -18,7 +19,8 @@ let mapStateToProps = (state) => {
 
 let mapDispatchToProps = (dispatch) => {
     return {
-        backToTree: () => { dispatch(setAppCurentPaAC('tree')) }
+        backToTree: () => { dispatch(setAppCurentPaAC('tree')) },
+        sendCompetence: (data) => { dispatch(sendCompetence(data)) }
     }
 }
 
