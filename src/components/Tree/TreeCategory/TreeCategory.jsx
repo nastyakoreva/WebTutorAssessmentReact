@@ -1,15 +1,16 @@
-import React, {useState} from "react";
+import React, {memo, useState} from "react";
 import css from "./TreeCategory.module.css"
 import TreeItem from "./../TreeItem/TreeItem"
 
-const TreeCategory = (props) => {
+const TreeCategory = memo((props) => {
 
     const [isOpen, setIsOpen] = useState(true);
     function toggle() {
         setIsOpen((isOpen) => !isOpen);
     }
-
-    const items = props.pas.map(item => <TreeItem item={item} getPa={props.getPa}/>);
+    
+    const filteredPAS = props.pas.filter(item=> item.pa.name.toLowerCase().includes(props.treeFilterTitle))
+    const items = filteredPAS.map(item => <TreeItem item={item} getPa={props.getPa}/>);
     return (
         <div className={css.category}>
             <div className={css.header}>
@@ -21,6 +22,6 @@ const TreeCategory = (props) => {
             {isOpen && items}
         </div>
     )
-}
+})
 
 export default TreeCategory;
