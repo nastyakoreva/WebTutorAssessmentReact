@@ -77,7 +77,8 @@ let mapStateToProps = (state) => {
         //current_next_page_title: state.app.next_page_title,
         instructionContent: state.tree.instructionContent,
         pas_tree: pas_tree,
-        assessment_user: state.tree.assessment_user
+        assessment_user: state.tree.assessment_user,
+        pas:state.tree.pas
     }
 }
 let mapDispatchToProps = (dispatch) => {
