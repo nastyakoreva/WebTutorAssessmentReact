@@ -1,11 +1,25 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import css from "./TreeFilter.module.css"
+import { useDebounce } from "../../../hooks/useDebounce";
 
 const TreeFilter = (props) => {
+
+    const [value, setValue]=useState('')
+    const debouncedValue = useDebounce(value,250)
+
+    const onChangeHandler=(e)=>{
+        setValue(e.currentTarget.value)
+    }
+
+    useEffect(()=>{
+        props.callback(debouncedValue)
+    },[debouncedValue])
+
+
     return (
         <div className={css.filter}>
             <div className={css.search_icon}></div>
-            <input type="text" placeholder="Поиск"/>
+            <input type="text" placeholder="Поиск" onChange={onChangeHandler} value={value}/>
         </div>
     )
 }
