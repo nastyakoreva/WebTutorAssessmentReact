@@ -19,8 +19,11 @@ let mapStateToProps = (state) => {
     pas_tree.sort = pa_cats;
     
     state.tree.pas.forEach(element => {
-        if(state.tree.assessment_user.id === element.person_id) {
+     
+        if(state.tree.assessment_user.id === element.person_id && element.type === "competence_appraisal" && element.status === "self") {
             console.log(element.person_id.toString());
+            console.log("element.type = ");
+            console.log(element.type);
             switch(element.workflow_state) {
                 case 'Assessment':
                     pas_tree['self'].push({ pa: element, btn_active: true, btn_text: 'Начать самооценку'});
