@@ -11,7 +11,7 @@ const Assessment = (props) => {
 
     return <div className={css.assessment}>
         <WorkflowWiget workflow_states={props.workflow_states} pa={props.pa} boss={props.boss} expert={props.expert} hr={props.hr}/>
-        <WfButtonsPanel backToTree={props.backToTree}/>
+        <WfButtonsPanel backToTree={props.backToTree} goNextPa={props.goNextPa} pa_id_next={props.pa_id_next}/>
         {competences}
 
         {/*Assessment page : <br/>pa.expert_person_fullname - {props.pa.expert_person_fullname}, <br/>pa.name - {props.pa.name}*/}
