@@ -9,10 +9,9 @@ const TreeCategory = memo((props) => {
         setIsOpen((isOpen) => !isOpen);
     }
     
-    let filteredPAS = props.pas.filter(item=> item.pa.name.toLowerCase().includes(props.treeFilterTitle))
-    if(filteredPAS.length == 0){
-        filteredPAS = props.pas.filter(item=> item.pa.position.toLowerCase().includes(props.treeFilterTitle))
-    }
+    let filteredPAS = props.pas.filter(item=> item.pa.name.toLowerCase().includes(props.treeFilterTitle) || 
+                                              item.pa.position.toLowerCase().includes(props.treeFilterTitle))
+
     const items = filteredPAS.map(item => <TreeItem item={item} getPa={props.getPa}/>);
     return (
         <div className={css.category}>
