@@ -12,7 +12,7 @@ const TreeFilter = (props) => {
     }
 
     useEffect(()=>{
-        props.callback(debouncedValue)
+        props.callback(debouncedValue.toLowerCase())
     },[debouncedValue])
 
 
