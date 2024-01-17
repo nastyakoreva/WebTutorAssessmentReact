@@ -19,8 +19,11 @@ let mapStateToProps = (state) => {
     pas_tree.sort = pa_cats;
     
     state.tree.pas.forEach(element => {
-        if(state.tree.assessment_user.id === element.person_id) {
+     
+        if(state.tree.assessment_user.id === element.person_id && element.type === "competence_appraisal" && element.status === "self") {
             console.log(element.person_id.toString());
+            console.log("element.type = ");
+            console.log(element.type);
             switch(element.workflow_state) {
                 case 'Assessment':
                     pas_tree['self'].push({ pa: element, btn_active: true, btn_text: 'Начать самооценку'});
@@ -43,25 +46,28 @@ let mapStateToProps = (state) => {
             }
         }
         else {
-            switch(element.workflow_state) {
-                case 'Assessment':
-                    pas_tree['apprise'].push({ pa: element, btn_active: false, btn_text: 'Дождитесь заполнения оценочных форм Оцениваемым'});
-                    break;
-                case 'Manager':
-                    pas_tree['apprise'].push({ pa: element, btn_active: true, btn_text: 'Начать'});
-                    break;
-                case 'Approval':
-                    pas_tree['approve'].push({ pa: element, btn_active: true, btn_text: 'Посмотреть'});
-                    break;
-                case 'Comitet':
-                    pas_tree['comitet'].push({ pa: element, btn_active: false, btn_text: 'Ожидание оценочного собеседования'});
-                    break;
-                case 'End':
-                    pas_tree['apprise'].push({ pa: element, btn_active: true, btn_text: 'Оценка завершена'});
-                    break;
-                default:
-                    pas_tree['apprise'].push({ pa: element, btn_active: false, btn_text: 'Этап оценки не определен'});
-                    break;
+            if(state.tree.assessment_user.id === element.expert_person_id && element.type === "competence_appraisal")
+            {
+                switch(element.workflow_state) {
+                    case 'Assessment':
+                        pas_tree['apprise'].push({ pa: element, btn_active: false, btn_text: 'Дождитесь заполнения оценочных форм Оцениваемым'});
+                        break;
+                    case 'Manager':
+                        pas_tree['apprise'].push({ pa: element, btn_active: true, btn_text: 'Начать'});
+                        break;
+                    case 'Approval':
+                        pas_tree['approve'].push({ pa: element, btn_active: true, btn_text: 'Посмотреть'});
+                        break;
+                    case 'Comitet':
+                        pas_tree['comitet'].push({ pa: element, btn_active: false, btn_text: 'Ожидание оценочного собеседования'});
+                        break;
+                    case 'End':
+                        pas_tree['apprise'].push({ pa: element, btn_active: true, btn_text: 'Оценка завершена'});
+                        break;
+                    default:
+                        pas_tree['apprise'].push({ pa: element, btn_active: false, btn_text: 'Этап оценки не определен'});
+                        break;
+                }
             }
         }
     });
