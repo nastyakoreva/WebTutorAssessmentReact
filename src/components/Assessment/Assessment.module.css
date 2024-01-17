@@ -4,4 +4,9 @@
     align-items: center;
     width: 100%;
     background-color: #f2f4f8;
+    .title {
+        font-size: x-large;
+        font-weight: bold;
+        width:90%;
+    }
 }

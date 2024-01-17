@@ -6,7 +6,7 @@ const WfButtonsPanel = (props) => {
         <div className={css.wfButton} onClick={props.backToTree}>Назад</div>
         <div className={css.grow}></div>
         <div className={css.wfButton} onClick={props.backToTree}>Сохранить и выйти</div>
-        <div className={css.wfButton}>Далее</div>
+        <div className={css.wfButton} onClick={() => {props.goNextPa(props.pa_id_next)}}>Далее</div>
     </div>
 
 }
