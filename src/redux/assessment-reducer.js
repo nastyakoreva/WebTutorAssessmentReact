@@ -12,6 +12,7 @@ let initialState = {
     expert: null,
     hr: null,
     competence_scales: [],
+    instruction: null,
     error: null,
     //assessment_user: null,
     sid: null
