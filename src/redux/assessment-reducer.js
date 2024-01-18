@@ -12,6 +12,7 @@ let initialState = {
     expert: null,
     hr: null,
     competence_scales: [],
+    indicator_scales: [],
     instruction: null,
     error: null,
     //assessment_user: null,
@@ -31,6 +32,7 @@ const assessmentReducer = (state = initialState, action) => {
                 expert: action.data.expert,
                 hr: action.data.hr,
                 competence_scales: action.data.competence_scales,
+                indicator_scales: action.data.indicator_scales,
                 instruction: action.data.instruction
                 //error: action.data.error,
                 //sid: action.data.sid

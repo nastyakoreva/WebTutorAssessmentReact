@@ -25,7 +25,7 @@ const getPaTypeName = (state) => {
                         {type: 'position_appraisal', name: 'Оценка потенциала'}, 
                         {type: 'development_plan', name: 'Оценка 3'}];
     const paTypeName = paTypeNames.find(x => x.type === state.tree.pas.find(p => p.id === state.app.current_pa).type);
-    return paTypeName != undefined ? paTypeName.name : '';
+    return paTypeName !== undefined ? paTypeName.name : '';
 }
 
 
@@ -39,6 +39,7 @@ let mapStateToProps = (state) => {
         expert: state.assessment.expert,
         hr: state.assessment.hr,
         competence_scales: state.assessment.competence_scales,
+        indicator_scales: state.assessment.indicator_scales,
         pa_id_next: getPaNextButton(state),
         pa_type_title: getPaTypeName(state),
         instruction: state.assessment.instruction

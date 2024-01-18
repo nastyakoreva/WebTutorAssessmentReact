@@ -1,0 +1,23 @@
+.wiget {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    border-radius: 15px;
+    overflow: hidden;
+    background-color: #dde1e6;
+    margin: 5px 0;
+    .header {
+        display: flex;
+        flex-direction: row;
+        color: #262d30;
+        font-weight: bold;
+        border-radius: 10px;
+        overflow: hidden;
+        padding: 10px 15px;
+        margin: 10px;
+    }
+    .content {
+        background-color: #ffffff;
+        padding: 10px 15px;
+    }
+}

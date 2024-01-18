@@ -13,12 +13,12 @@ export const Button = ({callback, btnClass, children}) => {
     }
   const btnClasses = classNames({
     [styles.btn]: true,
-    [styles.default]: btnClass==undefined,
-    [styles.dark]: btnClass=='dark',
-    [styles.info]: btnClass=='info',
-    [styles.danger]: btnClass=='danger',
-    [styles.base]: btnClass=='base',
-    [styles.success]: btnClass=='success',
+    [styles.default]: btnClass === undefined,
+    [styles.dark]: btnClass === 'dark',
+    [styles.info]: btnClass === 'info',
+    [styles.danger]: btnClass === 'danger',
+    [styles.base]: btnClass === 'base',
+    [styles.success]: btnClass === 'success',
 });
   return (
     <button className={btnClasses} onClick={onClickHandler}>{children}</button>

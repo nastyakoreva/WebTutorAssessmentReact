@@ -40,22 +40,6 @@ const appReducer = (state = initialState, action) => {
     }
 }
 
-const getPageName = pageNum => {
-    switch (pageNum) {
-        case 1:
-            return "Экспертная оценка квалификации";
-        case 2:
-            return "Оценка потенциала";
-        case 3:
-            return "Оценка результативности";
-        case 4:
-            return "Превью";
-        default:
-            return "";
-    }
-}
-
-
 export const setAppCurentPaAC = (newPa) => ({type: SET_CURRENT_PA, newPa})
 
 export const setNextButtonSettingsAC = (nextButtonSettings) => ({type: SET_NEXT_BUTTON_SETTINGS, nextButtonSettings})

@@ -54,26 +54,56 @@ else {
 
 
 competence_scales = [];
+indicator_scales = [];
 if(pa_doc.competences.competence != undefined && IsArray(pa_doc.competences.competence)) {
     for(pa_comp in pa_doc.competences.competence) {
         competence_doc = tools.open_doc(pa_comp.competence_id);
         if(competence_doc != undefined) {
-            competence_scales.push(competence_doc.TopElem);
+            competence_doc = competence_doc.TopElem;
+            //competence_scales.push(competence_doc);
             
+            if(pa_comp.plan != null && pa_comp.plan != '' || pa_comp.plan_text != null && pa_comp.plan_text != '' || pa_comp.plan_value != null && pa_comp.plan_value != '') {
+                competence_scales.push({
+                    id: String(competence_doc.id),
+                    name: String(competence_doc.name),
+                    desc: String(competence_doc.desc),
+                    scales: competence_doc.scales
+                });
+            }
+            if(pa_comp.indicators.indicator != undefined && IsArray(pa_comp.indicators.indicator)) {
+                for(pa_indic in pa_comp.indicators.indicator) {
+                    indicator_doc = tools.open_doc(pa_indic.indicator_id);
+                    if(indicator_doc != undefined) {
+                        indicator_doc = indicator_doc.TopElem;
+                        indicator_scales.push({
+                            competence_id: String(competence_doc.id),
+                            competence_name: String(competence_doc.name),
+                            id: String(indicator_doc.id),
+                            name: String(indicator_doc.name),
+                            scales: indicator_doc.scales
+                        });
+                    }
+                }
+            }
 
-            //alert(tools.object_to_text(competence_doc,'json'));
+
         }
     }
 }
+//alert(tools.object_to_text(competence_scales,'json'));
 result.competence_scales = competence_scales;
+result.indicator_scales = indicator_scales;
 
 pa_type_instruction = null;
 switch (pa.assessment_appraise_type) {
     case 'competence_appraisal':
         pa_type_instruction = tools.open_doc(7324579894839891006);
         break;
-    case 'development_plan':
+    case 'position_appraisal':
+        pa_type_instruction = tools.open_doc(7324579894839891006); //TODO fix id
         break;
+    case 'development_plan':
+        pa_type_instruction = tools.open_doc(7324579894839891006); //TODO fix id
     default:
         break;
 }

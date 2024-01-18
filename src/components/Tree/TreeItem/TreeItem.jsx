@@ -4,7 +4,6 @@ import { Button } from "../../../common/button/Button";
 
 const TreeItem = (props) => {
     let pict_url = props.item.pa.icon_url?props.item.pa.icon_url:'/download_file.html?file_id=6962198780573603416'
-    let a = props.item.btn_active;
     return (
         <div className={css.item}>
             <div className={css.user}>
