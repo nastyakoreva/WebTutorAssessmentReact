@@ -94,7 +94,7 @@ if(pa_doc.competences.competence != undefined && IsArray(pa_doc.competences.comp
 result.competence_scales = competence_scales;
 result.indicator_scales = indicator_scales;
 
-pa_type_instruction = null;
+pa_type_instruction = undefined;
 switch (pa.assessment_appraise_type) {
     case 'competence_appraisal':
         pa_type_instruction = tools.open_doc(7324579894839891006);
@@ -107,7 +107,7 @@ switch (pa.assessment_appraise_type) {
     default:
         break;
 }
-result.instruction = (pa_type_instruction != null) ? String(pa_type_instruction.TopElem.text_area) : null;
+result.instruction = (pa_type_instruction != undefined) ? String(pa_type_instruction.TopElem.text_area) : null;
 
 Response.Write(tools.object_to_text(result, 'json'));
 %>
