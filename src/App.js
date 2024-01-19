@@ -29,7 +29,7 @@ class App extends React.Component {
                       assessment_date_end={this.props.assessment_date_end}
                       assessment_user={this.props.assessment_user}/>
               {this.props.current_pa === 'tree' && <TreeContainer/>}
-              {this.props.current_pa !== null && this.props.current_pa !== 'tree' && this.props.current_pa !== 'preview' && <AssessmentContainer/>}
+              {this.props.current_pa !== null && this.props.current_pa !== 'tree' && this.props.current_pa !== 'preview' && <AssessmentContainer {...this.props}/>}
               {this.props.current_pa === 'preview' && <Preview/>}
           </div>
       )
@@ -39,6 +39,7 @@ class App extends React.Component {
 const mapStateToProps = (state) => ({
   initialized: state.app.initialized,
   current_pa: state.app.current_pa,
+  prew_pa:state.app.prew_pa,
   assessment_name: state.tree.assessment_name,
   assessment_date_start: state.tree.assessment_date_start,
   assessment_date_end: state.tree.assessment_date_end,

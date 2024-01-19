@@ -83,11 +83,11 @@ const assessmentReducer = (state = initialState, action) => {
 const setAssessmentPa = (data) => ({ type: SET_ASSESSMENT_PA, data });
 const setAssessmentCompetence = (data) => ({ type: SET_ASSESSMENT_COMPETENCE, data });
 
-export const getAssessmentPa = (pa_id) => (dispatch) => {
+export const getAssessmentPa = (pa_id, updatePrew) => (dispatch) => {
     assessmentAPI.getPaData(pa_id).then(response => {
         console.log(response);
         dispatch(setAssessmentPa(response.data))
-    }).then( () => { dispatch(setAppCurentPaAC(pa_id)) } ) 
+    }).then( () => { dispatch(setAppCurentPaAC(pa_id, updatePrew)) } ) 
 }
 
 export const sendCompetence = (data) => (dispatch) => {

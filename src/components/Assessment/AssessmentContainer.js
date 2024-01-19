@@ -1,7 +1,7 @@
 import {compose} from "redux";
 import {connect} from "react-redux";
 import Assessment from "./Assessment";
-import {setAppCurentPaAC} from "../../redux/app-reducer";
+import {setAppCurentPaAC, updateAppPrewPa} from "../../redux/app-reducer";
 import { getAssessmentPa, sendCompetence } from "../../redux/assessment-reducer";
 
 const pa_roadmap = ['competence_appraisal', 'position_appraisal', 'development_plan']; //TODO маршрут оценки (типы pa для кнопки далее)
@@ -30,6 +30,7 @@ const getPaTypeName = (state) => {
 
 
 let mapStateToProps = (state) => {
+    
     return {
         pa: state.assessment.pa,
         pa_doc: state.assessment.pa_doc,
@@ -46,10 +47,24 @@ let mapStateToProps = (state) => {
     }
 }
 
-let mapDispatchToProps = (dispatch) => {
+let mapDispatchToProps = (dispatch, ownProps) => {
+    
     return {
         backToTree: () => { dispatch(setAppCurentPaAC('tree')) },
-        goNextPa: (pa_id) => { pa_id === 'preview' ? dispatch(setAppCurentPaAC(pa_id)) : dispatch(getAssessmentPa(pa_id))},
+        goPrewPa:()=>{
+            if(ownProps.prew_pa.length>0){
+                let lastInPrew_pa = ownProps.prew_pa[ownProps.prew_pa.length-1]
+                if(lastInPrew_pa ==='tree'){
+                    dispatch(setAppCurentPaAC('tree'))
+                }else{
+                    
+                    dispatch(updateAppPrewPa())
+                    dispatch(getAssessmentPa(lastInPrew_pa, false))
+                }
+            }
+            
+        },
+        goNextPa: (pa_id) => { pa_id === 'preview' ? dispatch(setAppCurentPaAC(pa_id)) : dispatch(getAssessmentPa(pa_id, true))},
         sendCompetence: (data) => { dispatch(sendCompetence(data)) }
     }
 }

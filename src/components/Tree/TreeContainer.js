@@ -86,7 +86,7 @@ let mapStateToProps = (state) => {
 }
 let mapDispatchToProps = (dispatch) => {
     return {
-        getPa: (pa_id) => dispatch(getAssessmentPa(pa_id))
+        getPa: (pa_id) => dispatch(getAssessmentPa(pa_id,true))
     //    setNextButtonSettings: (val) => {
     //        dispatch(setNextButtonSettingsAC(val));
     //    },
