@@ -15,7 +15,6 @@ const Assessment = (props) => {
         props.pa_doc.competences.competence.filter(c => c.indicators.indicator !== undefined).map(x =>
         <CompetenceWithIndicatorWiget competence_id={x.competence_id} indicators={x.indicators.indicator} pa_doc={props.pa_doc}
             indicator_scales={props.indicator_scales} sendCompetence={props.sendCompetence}/>);
-    //console.log(competence_indicators);
 
     return <div className={css.assessment}>
         <WorkflowWiget workflow_states={props.workflow_states} pa={props.pa} boss={props.boss} expert={props.expert} hr={props.hr}/>
