@@ -8,8 +8,10 @@ import CompetenceWithIndicatorWiget from "./CompetenceWithIndicatorWiget/Compete
 
 const Assessment = (props) => {
 
-    const competences = props.competence_scales.map(s => 
-        <CompetenceWidget id={s.id} name={s.name} desc={s.desc} scales={s.scales} pa_doc={props.pa_doc} sendCompetence={props.sendCompetence}/>)
+    const competences = props.pa_doc.competences.competence !== undefined &&
+    props.pa_doc.competences.competence.filter(c => c.indicators.indicator === undefined).map(comp =>
+        <CompetenceWidget competence={comp} pa_doc={props.pa_doc} sendCompetence={props.sendCompetence}
+            competence_scale={props.competence_scales.find(x => x.id === comp.competence_id)}/>)  
     
     const competence_indicators = props.pa_doc.competences.competence !== undefined &&
         props.pa_doc.competences.competence.filter(c => c.indicators.indicator !== undefined).map(x =>
