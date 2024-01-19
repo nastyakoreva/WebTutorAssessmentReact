@@ -19,7 +19,7 @@ const Assessment = (props) => {
 
     return <div className={css.assessment}>
         <WorkflowWiget workflow_states={props.workflow_states} pa={props.pa} boss={props.boss} expert={props.expert} hr={props.hr}/>
-        <WfButtonsPanel backToTree={props.backToTree} goNextPa={props.goNextPa} pa_id_next={props.pa_id_next}/>
+        <WfButtonsPanel backToTree={props.backToTree} goNextPa={props.goNextPa} goPrewPa={props.goPrewPa} pa_id_next={props.pa_id_next}/>
         <div className={css.title}>{props.pa_type_title}</div>
         {props.instruction && <PaTypeInstruction instruction={props.instruction}></PaTypeInstruction>}
         {competences}
