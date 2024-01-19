@@ -16,7 +16,10 @@ comment = '';
 wt_answer = [];
 xmlBody = ParseJson( Request.Body );
 alert('xmlBody ' + tools.object_to_text( xmlBody, "json" ));
-if(xmlBody != null && xmlBody.data != null && xmlBody.data.mode == "put" && (xmlBody.data.HasProperty("competence_mark") || xmlBody.data.HasProperty("competence_comment"))) {
+if(xmlBody != null && xmlBody.data != null && xmlBody.data.mode == "put" 
+    && (xmlBody.data.HasProperty("competence_mark") || xmlBody.data.HasProperty("competence_comment") 
+        || xmlBody.data.HasProperty("competence_indicator"))) {
+    
 	//значение в компетенцию
     if(xmlBody.data.HasProperty("competence_mark")) {
         pa_id = xmlBody.data.competence_mark.pa_id;
@@ -70,6 +73,53 @@ if(xmlBody != null && xmlBody.data != null && xmlBody.data.mode == "put" && (xml
                     comment: comment
                 });
                 docPa.Save();
+            }
+            else {
+                status = 0;
+                comment = 'Нет компетенции в указанном PA';
+            }
+        }
+        else {
+            status = 0;
+            comment = 'Нет указанной PA';
+        }
+    }
+
+    //индикатор в компетенцию
+    if(xmlBody.data.HasProperty("competence_indicator")) {
+        pa_id = xmlBody.data.competence_indicator.pa_id;
+        comp_id = xmlBody.data.competence_indicator.comp_id;
+        indic_id = xmlBody.data.competence_indicator.indic_id;
+        mark = xmlBody.data.competence_indicator.mark;
+        mark_text = xmlBody.data.competence_indicator.mark_text;
+        mark_value = xmlBody.data.competence_indicator.HasProperty("mark_value") ? xmlBody.data.competence_indicator.mark_value : null;
+
+        docPa = tools.open_doc(pa_id);
+
+        if(docPa != undefined) { 
+            var competences = ArraySelect(docPa.TopElem.competences.competence, "competence_id == "+comp_id)
+            if(competences.length > 0) {
+                var indicators = ArraySelect(competences[0].indicators.indicator, "indicator_id == "+indic_id)
+                if(indicators.length > 0) {
+                    indicators[0].mark = mark;
+                    indicators[0].mark_text = mark_text;
+                    indicators[0].mark_value = mark_value;
+                    wt_answer.push({
+                        pa_id: pa_id,
+                        comp_id: comp_id,
+                        indicator: {
+                            id: indic_id,
+                            mark: mark,
+                            mark_text: mark_text,
+                            mark_value: mark_value
+                        }
+                    });
+                    docPa.Save();
+                }
+                else {
+                    status = 0;
+                    comment = 'Нет индикатора в компетенции в указанном PA';
+                }
             }
             else {
                 status = 0;

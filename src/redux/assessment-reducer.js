@@ -53,6 +53,15 @@ const assessmentReducer = (state = initialState, action) => {
                                     if(wt_answer.comment !== undefined) {
                                         comp.comment = wt_answer.comment;
                                     }
+                                    if(wt_answer.indicator !== undefined && wt_answer.indicator !== null) {
+                                        for(let indic of comp.indicators.indicator) {
+                                            if(indic.indicator_id === wt_answer.indicator.id) {
+                                                indic.mark = wt_answer.indicator.mark;
+                                                indic.mark_text = wt_answer.indicator.mark_text;
+                                                indic.mark_value = wt_answer.indicator.mark_value;
+                                            }
+                                        }
+                                    }
                                 }
                             }
                             return comp;
@@ -113,6 +122,19 @@ export const sendCompetence = (data) => (dispatch) => {
                 pa_id: data.name,
                 comp_id: data.attributes['comp_id'].value,
                 comment: data.value,
+            }
+        }
+    }
+    if(data.attributes['role'].value === 'indicator_mark') {
+        outputMessage = {
+            mode: "put",
+            competence_indicator: {
+                pa_id: data.name,
+                comp_id: data.attributes['comp_id'].value,
+                indic_id: data.attributes['indicator_id'].value,
+                mark: data.value,
+                mark_text: data.attributes['mark_text'].value,
+                mark_value: data.attributes['mark_value']?.value,
             }
         }
     }
