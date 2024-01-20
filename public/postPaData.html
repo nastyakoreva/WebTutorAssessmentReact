@@ -18,7 +18,7 @@ xmlBody = ParseJson( Request.Body );
 alert('xmlBody ' + tools.object_to_text( xmlBody, "json" ));
 if(xmlBody != null && xmlBody.data != null && xmlBody.data.mode == "put" 
     && (xmlBody.data.HasProperty("competence_mark") || xmlBody.data.HasProperty("competence_comment") 
-        || xmlBody.data.HasProperty("competence_indicator"))) {
+        || xmlBody.data.HasProperty("competence_indicator") || xmlBody.data.HasProperty("question"))) {
     
 	//значение в компетенцию
     if(xmlBody.data.HasProperty("competence_mark")) {
@@ -124,6 +124,35 @@ if(xmlBody != null && xmlBody.data != null && xmlBody.data.mode == "put"
             else {
                 status = 0;
                 comment = 'Нет компетенции в указанном PA';
+            }
+        }
+        else {
+            status = 0;
+            comment = 'Нет указанной PA';
+        }
+    }
+    //вопрос в PA
+    if(xmlBody.data.HasProperty("question")) {
+        pa_id = xmlBody.data.question.pa_id;
+        quest_id = xmlBody.data.question.question_id;
+        quest_mark = xmlBody.data.question.question_mark;
+
+        docPa = tools.open_doc(pa_id);
+
+        if(docPa != undefined) { 
+            questions = ArraySelect(docPa.TopElem.supplementary_questions.supplementary_question, "supplementary_question_id == "+quest_id)
+		    if(questions.length > 0) {
+                questions[0].supplementary_question_mark = quest_mark;
+                wt_answer.push({
+                    pa_id: pa_id,
+                    quest_id: quest_id,
+                    quest_mark: quest_mark
+                });
+                docPa.Save();
+            }
+            else {
+                status = 0;
+                comment = 'Нет вопроса в указанном PA';
             }
         }
         else {

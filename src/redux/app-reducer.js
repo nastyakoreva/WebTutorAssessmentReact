@@ -5,6 +5,7 @@ const INITIALIZED_SUCCESS = 'INITIALIZED_SUCCESS';
 const SET_CURRENT_PA = 'SET_CURRENT_PA';
 const SET_NEXT_BUTTON_SETTINGS = 'SET_NEXT_BUTTON_SETTINGS';
 const UPDATE_PREW_PA = 'UPDATE_PREW_PA'
+
 let initialState = {
     initialized: false,
     current_pa: null,
@@ -22,9 +23,9 @@ const appReducer = (state = initialState, action) => {
             return {
                 ...state,
                 initialized: true,
-                current_pa: 'tree',               
+                current_pa: 'tree',
             }
-        case SET_CURRENT_PA:{
+        case SET_CURRENT_PA:
             if(action.updatePrew){
                 return {
                     ...state,
@@ -38,11 +39,8 @@ const appReducer = (state = initialState, action) => {
                 current_pa: action.newPa,
                 //page_name: getPageName(action.newPage)
             }
-        }
-            
         case UPDATE_PREW_PA:
-             {
-                
+            {
                 if(state.prew_pa.length>0){
                     let newArrPrew = state.prew_pa.slice(0,state.prew_pa.length-1)
                     return{...state, prew_pa:newArrPrew} 

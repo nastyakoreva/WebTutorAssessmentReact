@@ -1,4 +1,4 @@
-import { useLocation,
+{/*import { useLocation,
   useNavigate,
   useParams, } from 'react-router-dom';
 
@@ -16,4 +16,4 @@ export const withRouter = (Component) => {
   }
 
   return ComponentWithRouterProp;
-};
+};*/}

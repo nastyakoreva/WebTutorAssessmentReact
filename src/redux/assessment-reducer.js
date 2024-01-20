@@ -13,6 +13,7 @@ let initialState = {
     hr: null,
     competence_scales: [],
     indicator_scales: [],
+    question_scales: [],
     instruction: null,
     error: null,
     //assessment_user: null,
@@ -33,6 +34,7 @@ const assessmentReducer = (state = initialState, action) => {
                 hr: action.data.hr,
                 competence_scales: action.data.competence_scales,
                 indicator_scales: action.data.indicator_scales,
+                question_scales: action.data.question_scales,
                 instruction: action.data.instruction
                 //error: action.data.error,
                 //sid: action.data.sid
@@ -44,7 +46,7 @@ const assessmentReducer = (state = initialState, action) => {
                     ...state.pa_doc,
                     competences: {
                         ...state.pa_doc.competences,
-                        competence: state.pa_doc.competences.competence.map((comp) => {
+                        competence: state.pa_doc.competences.competence?.map((comp) => {
                             for(let wt_answer of action.data.wt_answer) {
                                 if(comp.competence_id === wt_answer.comp_id) {
                                     if(wt_answer.mark !== undefined) {
@@ -65,6 +67,14 @@ const assessmentReducer = (state = initialState, action) => {
                                 }
                             }
                             return comp;
+                        }),
+                        ...state.pa_doc.supplementary_questions,
+                        supplementary_questions: state.pa_doc.supplementary_questions.supplementary_question?.map((quest) => {
+                            for(let wt_answer of action.data.wt_answer) {
+                                if(quest.supplementary_question_id === wt_answer.quest_id) {
+                                    quest.supplementary_question_mark = wt_answer.quest_mark;
+                                }
+                            }
                         })
                     }
                 }
@@ -135,6 +145,16 @@ export const sendCompetence = (data) => (dispatch) => {
                 mark: data.value,
                 mark_text: data.attributes['mark_text'].value,
                 mark_value: data.attributes['mark_value']?.value,
+            }
+        }
+    }
+    if(data.attributes['role'].value === 'question') {
+        outputMessage = {
+            mode: "put",
+            question: {
+                pa_id: data.name,
+                question_id: data.attributes['question_id'].value,
+                question_mark: data.value,
             }
         }
     }
