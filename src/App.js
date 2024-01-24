@@ -5,8 +5,8 @@ import {connect} from "react-redux";
 import {initializeApp} from "./redux/app-reducer";
 import AssessmentContainer from "./components/Assessment/AssessmentContainer";
 import Header from "./components/Header/Header";
-import Preview from "./components/Preview/Preview";
-import './common/styles/index.module.css'
+import PreviewContainer from "./components/Preview/PreviewContainer";
+//import './common/styles/index.module.css'
 
 class App extends React.Component {
 
@@ -30,7 +30,7 @@ class App extends React.Component {
                       assessment_user={this.props.assessment_user}/>
               {this.props.current_pa === 'tree' && <TreeContainer/>}
               {this.props.current_pa !== null && this.props.current_pa !== 'tree' && this.props.current_pa !== 'preview' && <AssessmentContainer {...this.props}/>}
-              {this.props.current_pa === 'preview' && <Preview/>}
+              {this.props.current_pa === 'preview' && <PreviewContainer {...this.props}/>}
           </div>
       )
   }

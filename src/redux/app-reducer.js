@@ -23,21 +23,32 @@ const appReducer = (state = initialState, action) => {
             return {
                 ...state,
                 initialized: true,
+                prew_pa: [],
                 current_pa: 'tree',
             }
         case SET_CURRENT_PA:
-            if(action.updatePrew){
+            if(action.newPa === 'tree') {
                 return {
                     ...state,
-                    prew_pa: [...state.prew_pa, state.current_pa],
-                    current_pa: action.newPa,
-                    //page_name: getPageName(action.newPage)
+                    prew_pa: [],
+                    current_pa: action.newPa
                 }
             }
-            return {
-                ...state,
-                current_pa: action.newPa,
-                //page_name: getPageName(action.newPage)
+            else {
+                if(action.updatePrew && state.prew_pa.indexOf(state.current_pa) === -1) {
+                    return {
+                        ...state,
+                        prew_pa: [...state.prew_pa, state.current_pa],
+                        current_pa: action.newPa
+                    }
+                }
+                else {
+                    return {
+                        ...state,
+                        current_pa: action.newPa
+                        //page_name: getPageName(action.newPage)
+                    }
+                }
             }
         case UPDATE_PREW_PA:
             {

@@ -15,5 +15,8 @@ export const assessmentAPI = {
     },
     sendCompetence(message) {
         return instance.post(`/custom/assessment_aup/build/postPaData.html`,{ data: message });
+    },
+    getPreviewData(plan_id) {
+        return instance.get(`/custom/assessment_aup/build/getPreviewData.html?plan_id=`+plan_id);
     }
 };

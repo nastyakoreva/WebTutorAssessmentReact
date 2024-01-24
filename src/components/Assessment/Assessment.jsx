@@ -1,7 +1,7 @@
 import React from "react";
-import WorkflowWiget from "./WorkflowWiget/WorkflowWiget";
+import WorkflowWiget from "../WorkflowWiget/WorkflowWiget";
 import css from './Assessment.module.css'
-import WfButtonsPanel from "./WfButtonsPanel/WfButtonsPanel";
+import WfButtonsPanel from "../WfButtonsPanel/WfButtonsPanel";
 import CompetenceWidget from "./CompetenceWidget/CompetenceWidget";
 import PaTypeInstruction from "./PaTypeInstruction/PaTypeInstruction";
 import CompetenceWithIndicatorWiget from "./CompetenceWithIndicatorWiget/CompetenceWithIndicatorWiget";
@@ -25,7 +25,7 @@ const Assessment = (props) => {
 
     return <div className={css.assessment}>
         <WorkflowWiget workflow_states={props.workflow_states} pa={props.pa} boss={props.boss} expert={props.expert} hr={props.hr}/>
-        <WfButtonsPanel backToTree={props.backToTree} goNextPa={props.goNextPa} goPrewPa={props.goPrewPa} pa_id_next={props.pa_id_next}/>
+        <WfButtonsPanel backToTree={props.backToTree} goNextPa={props.goNextPa} goPrewPa={props.goPrewPa} pa_id_next={props.pa_id_next} plan_id={props.plan_id}/>
         <div className={css.title}>{props.pa_type_title}</div>
         {props.instruction && <PaTypeInstruction instruction={props.instruction}></PaTypeInstruction>}
         {competences}
