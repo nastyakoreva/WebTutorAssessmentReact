@@ -1,6 +1,6 @@
 import React from "react";
 import css from "./ResultTable.module.css"
-
+import { ResultTableHeader } from "./TableHeader/ResultTableHeader";
 
 const ResultTable = (props) => {
     console.log(props);
@@ -10,7 +10,7 @@ const ResultTable = (props) => {
 
     return (
         <div className={css.tableContainer}>
-            table
+           <ResultTableHeader/>
         </div>
     )
 }
