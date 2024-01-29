@@ -14,11 +14,13 @@ result = {};
 status = 1;
 comment = '';
 wt_answer = [];
+app_action = {};
 xmlBody = ParseJson( Request.Body );
 alert('xmlBody ' + tools.object_to_text( xmlBody, "json" ));
 if(xmlBody != null && xmlBody.data != null && xmlBody.data.mode == "put" 
     && (xmlBody.data.HasProperty("competence_mark") || xmlBody.data.HasProperty("competence_comment") 
-        || xmlBody.data.HasProperty("competence_indicator") || xmlBody.data.HasProperty("question"))) {
+        || xmlBody.data.HasProperty("competence_indicator") || xmlBody.data.HasProperty("question")
+        || xmlBody.data.HasProperty("plan_workflow_state"))) {
     
 	//значение в компетенцию
     if(xmlBody.data.HasProperty("competence_mark")) {
@@ -161,6 +163,121 @@ if(xmlBody != null && xmlBody.data != null && xmlBody.data.mode == "put"
         }
     }
 
+    //plan_workflow_state
+    if(xmlBody.data.HasProperty("plan_workflow_state")) {
+        plan_id = OptInt(xmlBody.data.plan_workflow_state.plan_id);
+        //pa_status = xmlBody.data.plan_workflow_state.pa_status;
+        //pa_expert = OptInt(xmlBody.data.plan_workflow_state.pa_expert);
+        pa_person = OptInt(xmlBody.data.plan_workflow_state.pa_person);
+        workflow_state = xmlBody.data.plan_workflow_state.workflow_state;
+        comment = xmlBody.data.plan_workflow_state.comment;
+        
+        docPlan = tools.open_doc(plan_id);
+
+        if(docPlan != undefined) {
+            workflowDoc = tools.open_doc( docPlan.TopElem.workflow_id ).TopElem;
+            
+            cur_pas = XQuery("for $elem in pas where $elem/assessment_plan_id = "+plan_id+" and $elem/person_id = "+pa_person+" return $elem");
+
+            if(workflow_state == 'Manager') {
+                //TODO уточнить про "вернуть на доработку", с каких этапов в какие разрешен переход
+                if(docPlan.TopElem.workflow_state == 'Assessment' || docPlan.TopElem.workflow_state == 'Approval') {
+                    docPlan.TopElem.workflow_state = 'Manager';
+                    docPlan.TopElem.workflow_state_name = docPlan.TopElem.get_workflow_state_name(workflowDoc);
+                    docPlan.Save();
+                    app_action = { page: 'tree', appr_id: String(docPlan.TopElem.assessment_appraise_id) };
+                    for(pa in cur_pas) {
+                        alert('set manager pa.id' + pa.id);
+                        docPa = tools.open_doc(pa.id);
+                        docPa.TopElem.workflow_state = 'Manager';
+                        docPa.TopElem.workflow_state_name = docPa.TopElem.get_workflow_state_name(workflowDoc);
+                        if(docPa.TopElem.status == 'self')
+                            docPa.TopElem.is_done = 1;
+                        else
+                            docPa.TopElem.is_done = 0;
+                        docPa.Save();
+                    }
+                }
+                else {
+                    status = 0;
+                    comment = 'Переход ' + docPlan.TopElem.workflow_state + ' -> Manager не разрешен';
+                }
+            }
+            if(workflow_state == 'Approval') {
+                if(docPlan.TopElem.workflow_state == 'Manager') {
+                    docPlan.TopElem.workflow_state = 'Approval';
+                    docPlan.TopElem.workflow_state_name = docPlan.TopElem.get_workflow_state_name(workflowDoc);
+                    docPlan.Save();
+                    app_action = { page: 'tree', appr_id: String(docPlan.TopElem.assessment_appraise_id) };
+                    for(pa in cur_pas) {
+                        alert('set approval pa.id' + pa.id);
+                        docPa = tools.open_doc(pa.id);
+                        docPa.TopElem.workflow_state = 'Approval';
+                        docPa.TopElem.workflow_state_name = docPa.TopElem.get_workflow_state_name(workflowDoc);
+                        if(docPa.TopElem.status == 'manager' || docPa.TopElem.status == 'self')
+                            docPa.TopElem.is_done = 1;
+                        else if(docPa.TopElem.status != 'manager' && docPa.TopElem.status != 'self') {
+                            docPa.TopElem.is_done = 0;
+                        }
+                        docPa.Save();
+                    }
+                }
+                else {
+                    status = 0;
+                    comment = 'Переход ' + docPlan.TopElem.workflow_state + ' -> Approval не разрешен';
+                }
+            }
+            
+            if(workflow_state == 'Comitet') {
+                if(docPlan.TopElem.workflow_state == 'Approval') {
+                    docPlan.TopElem.workflow_state = 'Comitet';
+                    docPlan.TopElem.workflow_state_name = docPlan.TopElem.get_workflow_state_name(workflowDoc);
+                    docPlan.Save();
+                    app_action = { page: 'tree', appr_id: String(docPlan.TopElem.assessment_appraise_id) };
+                    for(pa in cur_pas) {
+                        alert('set Comitet pa.id' + pa.id);
+                        docPa = tools.open_doc(pa.id);
+                        docPa.TopElem.workflow_state = 'Comitet';
+                        docPa.TopElem.workflow_state_name = docPa.TopElem.get_workflow_state_name(workflowDoc);
+                        if(docPa.TopElem.status == 'expert')
+                            docPa.TopElem.is_done = 1;
+                        docPa.Save();
+                    }
+                }
+                else {
+                    status = 0;
+                    comment = 'Переход ' + docPlan.TopElem.workflow_state + ' -> Comitet не разрешен';
+                }
+            }
+
+            if(workflow_state == 'End') {
+                if(docPlan.TopElem.workflow_state == 'Comitet') {
+                    docPlan.TopElem.workflow_state = 'End';
+                    docPlan.TopElem.workflow_state_name = docPlan.TopElem.get_workflow_state_name(workflowDoc);
+                    docPlan.Save();
+                    app_action = { page: 'tree', appr_id: String(docPlan.TopElem.assessment_appraise_id) };
+                    for(pa in cur_pas) {
+                        alert('set End pa.id' + pa.id);
+                        docPa = tools.open_doc(pa.id);
+                        docPa.TopElem.workflow_state = 'End';
+                        docPa.TopElem.workflow_state_name = docPa.TopElem.get_workflow_state_name(workflowDoc);
+                        if(docPa.TopElem.status == 'interview')
+                            docPa.TopElem.is_done = 1;
+                        docPa.Save();
+                    }
+                }
+                else {
+                    status = 0;
+                    comment = 'Переход ' + docPlan.TopElem.workflow_state + ' -> End не разрешен';
+                }
+            }
+
+        }
+        else {
+            status = 0;
+            comment = 'Нет указанного AssessmentPlan';
+        }
+    }
 }
 else {
 	status = 0;
@@ -170,6 +287,7 @@ else {
 result.status = status;
 result.wt_answer = wt_answer;
 result.comment = comment;
+result.app_action = app_action;
 
 Response.Write( tools.object_to_text( result, "json" ) );
 %>

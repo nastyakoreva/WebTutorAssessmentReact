@@ -75,6 +75,7 @@ const assessmentReducer = (state = initialState, action) => {
                                     quest.supplementary_question_mark = wt_answer.quest_mark;
                                 }
                             }
+                            return quest;
                         })
                     }
                 }

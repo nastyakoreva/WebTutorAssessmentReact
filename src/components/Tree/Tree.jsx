@@ -13,7 +13,10 @@ const Tree = (props) => {
     }
 
     console.log(props);
-    const categories = props.pas_tree.sort.map(cat => <TreeCategory category_title={cat.title} pas={props.pas_tree[cat.name]} getPa={props.getPa} treeFilterTitle={treeFilterTitle}/>);
+    //const categories = props.pas_tree.sort.map(cat => <TreeCategory category_title={cat.title} pas={props.pas_tree[cat.name]} getPa={props.getPa} treeFilterTitle={treeFilterTitle}/>);
+    const categories = props.pas_tree.sort.map(cat => 
+        <TreeCategory category_title={cat.title} pas={props.pas_tree[cat.name]} treeFilterTitle={treeFilterTitle}
+            getPa={props.getPa} getPreview={props.getPreview}/>);
     return (
         <div className={css.tree}>
             <div className={css.control_panel}>

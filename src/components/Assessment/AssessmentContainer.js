@@ -15,8 +15,8 @@ const getPaNextButton = (state) => {
     }
     else {
         //TODO расскоментировать/поправить workflow_state, когда будет отлажен процесс перехода pa в следующий workflow_state
-        const next_pa = state.tree.pas.find(p => p.person_id === cur_pa.person_id && p.expert_person_id === cur_pa.expert_person_id 
-            /*&& p.workflow_state === cur_pa.workflow_state*/ && p.type === pa_roadmap[pa_roadmap_index + 1]);
+        const next_pa = state.tree.pas.find(p => /*p.person_id === cur_pa.person_id &&*/ p.expert_person_id === cur_pa.expert_person_id 
+            /*&& p.workflow_state === cur_pa.workflow_state*/&& p.plan_id === cur_pa.plan_id && p.type === pa_roadmap[pa_roadmap_index + 1]);
         return next_pa !== undefined ? next_pa.id : 'preview';
     }
 }

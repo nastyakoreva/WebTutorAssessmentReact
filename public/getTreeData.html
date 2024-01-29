@@ -14,8 +14,8 @@ if(appr_id == undefined) {  //dev
 }
 
 cacheUsers = {};
-//and $elem/expert_person_id = "+curUserID+"
-var pas = XQuery("for $elem in pas where $elem/assessment_appraise_id = "+appr_id+" return $elem");
+pa_my = "and $elem/expert_person_id = "+curUserID;
+var pas = XQuery("for $elem in pas where $elem/assessment_appraise_id = "+appr_id+" "+pa_my+" return $elem");
 
 result = {};
 result.pas = [];
@@ -37,7 +37,8 @@ for(pa in pas) {
 		type: pa.assessment_appraise_type,
 		status: pa.status,
 		workflow_state: pa.workflow_state,
-        is_done: pa.is_done
+        is_done: pa.is_done,
+		plan_id: String(pa.assessment_plan_id)
 	};
 	
 	result.pas.push(obj);

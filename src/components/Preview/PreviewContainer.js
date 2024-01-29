@@ -2,6 +2,7 @@ import {compose} from "redux";
 import {connect} from "react-redux";
 import {setAppCurentPaAC, updateAppPrewPa} from "../../redux/app-reducer";
 import { getAssessmentPa, sendCompetence } from "../../redux/assessment-reducer";
+import {sendWFstate} from "../../redux/preview-reducer";
 //import {getPreviewData} from "../../redux/preview-reducer";
 import Preview from "./Preview";
 
@@ -53,7 +54,9 @@ let mapStateToProps = (state) => {
         plan_pas: state.preview.plan_pas,
         competence_scales: state.preview.competence_scales,
         indicator_scales: state.preview.indicator_scales,
-        question_scales: state.preview.question_scales
+        question_scales: state.preview.question_scales,
+        curUserId: state.tree.assessment_user.id,
+        pa_curr_expert_id: state.assessment.pa.expert_person_id
 
     }
 }
@@ -67,6 +70,7 @@ let mapDispatchToProps = (dispatch, ownProps) => {
             dispatch(updateAppPrewPa());
             dispatch(getAssessmentPa(lastInPrew_pa, false));
         },
+        sendWFstate: (data) => { dispatch(sendWFstate(data)) }
         //goNextPa: (pa_id, plan_id) => { pa_id === 'preview' ? dispatch(getPreviewData(plan_id)) : dispatch(getAssessmentPa(pa_id, true))},
         //sendCompetence: (data) => { dispatch(sendCompetence(data)) }*/
     }

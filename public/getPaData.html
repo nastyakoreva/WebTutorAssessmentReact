@@ -56,53 +56,47 @@ else {
 competence_scales = [];
 indicator_scales = [];
 question_scales = [];
-if(pa_doc.competences.competence != undefined && IsArray(pa_doc.competences.competence)) {
-    for(pa_comp in pa_doc.competences.competence) {
-        competence_doc = tools.open_doc(pa_comp.competence_id);
-        if(competence_doc != undefined) {
-            competence_doc = competence_doc.TopElem;
-            //competence_scales.push(competence_doc);
+for(pa_comp in pa_doc.competences) {
+    competence_doc = tools.open_doc(pa_comp.competence_id);
+    if(competence_doc != undefined) {
+        competence_doc = competence_doc.TopElem;
             
-            if(pa_comp.plan != null && pa_comp.plan != '' || pa_comp.plan_text != null && pa_comp.plan_text != '' || pa_comp.plan_value != null && pa_comp.plan_value != '') {
-                competence_scales.push({
-                    id: String(competence_doc.id),
-                    name: String(competence_doc.name),
-                    desc: String(competence_doc.desc),
-                    scales: competence_doc.scales
-                });
-            }
-            if(pa_comp.indicators.indicator != undefined && IsArray(pa_comp.indicators.indicator)) {
-                for(pa_indic in pa_comp.indicators.indicator) {
-                    indicator_doc = tools.open_doc(pa_indic.indicator_id);
-                    if(indicator_doc != undefined) {
-                        indicator_doc = indicator_doc.TopElem;
-                        indicator_scales.push({
-                            competence_id: String(competence_doc.id),
-                            competence_name: String(competence_doc.name),
-                            id: String(indicator_doc.id),
-                            name: String(indicator_doc.name),
-                            scales: indicator_doc.scales
-                        });
-                    }
-                }
-            }
-
-        }
-    }
-}
-if(pa_doc.supplementary_questions != undefined && IsArray(pa_doc.supplementary_questions.supplementary_question)) {
-    for(pa_question in pa_doc.supplementary_questions.supplementary_question) {
-        question_doc = tools.open_doc(pa_question.supplementary_question_id);
-        if(question_doc != undefined) {
-            question_doc = question_doc.TopElem;
-            question_scales.push({
-                id: String(pa_question.supplementary_question_id),
-                name: String(question_doc.name),
-                scales: question_doc.scales
+        if(pa_comp.plan != null && pa_comp.plan != '' || pa_comp.plan_text != null && pa_comp.plan_text != '' || pa_comp.plan_value != null && pa_comp.plan_value != '') {
+            competence_scales.push({
+                id: String(competence_doc.id),
+                name: String(competence_doc.name),
+                desc: String(competence_doc.desc),
+                scales: competence_doc.scales
             });
         }
+        for(pa_indic in pa_comp.indicators) {
+            indicator_doc = tools.open_doc(pa_indic.indicator_id);
+            if(indicator_doc != undefined) {
+                indicator_doc = indicator_doc.TopElem;
+                indicator_scales.push({
+                    competence_id: String(competence_doc.id),
+                    competence_name: String(competence_doc.name),
+                    id: String(indicator_doc.id),
+                    name: String(indicator_doc.name),
+                    scales: indicator_doc.scales
+                });
+            }
+        }
     }
 }
+
+for(pa_question in pa_doc.supplementary_questions) {
+    question_doc = tools.open_doc(pa_question.supplementary_question_id);
+    if(question_doc != undefined) {
+        question_doc = question_doc.TopElem;
+        question_scales.push({
+            id: String(pa_question.supplementary_question_id),
+            name: String(question_doc.name),
+            scales: question_doc.scales
+        });
+    }
+}
+
 //alert(tools.object_to_text(competence_scales,'json'));
 result.competence_scales = competence_scales;
 result.indicator_scales = indicator_scales;

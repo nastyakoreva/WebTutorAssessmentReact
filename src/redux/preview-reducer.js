@@ -1,5 +1,6 @@
 import {assessmentAPI} from "../api/api";
 import {setAppCurentPaAC} from "./app-reducer";
+import {getTreeData} from "./tree-reducer";
 
 const SET_PREVIEW = 'SET_PREVIEW';
 const SET_ASSESSMENT_COMPETENCE = 'SET_ASSESSMENT_COMPETENCE';
@@ -39,6 +40,46 @@ export const getPreviewData = (plan_id) => (dispatch) => {
         console.log(response);
         dispatch(setPreview(response.data))
     }).then( () => { dispatch(setAppCurentPaAC('preview', true)) } ) 
+}
+
+export const sendWFstate = (data) => (dispatch, getState) => {
+    //debugger;
+    console.log(data);
+    //console.log(data.attributes['role'].value);
+
+        const state = getState();
+        const outputMessage = {
+            mode: "put",
+            plan_workflow_state: {
+                plan_id: state.assessment.pa.assessment_plan_id,
+                pa_person: state.assessment.pa.person_id,
+                workflow_state: data.workflow_state,
+                comment: data.comment,
+            }
+        }
+    
+    
+    assessmentAPI.sendCompetence(outputMessage).then(response => {
+        console.log(outputMessage);
+        if(response.data.status === 1) {
+            if(response.data.app_action && response.data.app_action.page === 'tree') {
+                dispatch(getTreeData(response.data.app_action.appr_id)); 
+                dispatch(setAppCurentPaAC('tree', true)) ;
+            }
+            //dispatch(setAssessmentCompetence(response.data));
+        }
+        else if(response.data.status === 0) {
+            alert(response.data.comment);
+        }
+    }, error => {
+        if (error.response.status === 401) {
+            alert("Необходима авторизация, обновите страницу");
+        }
+        if (error.response.status === 500) {
+            alert("Ошибка");
+        }
+        return error;
+    })
 }
 /*
 export const sendCompetence = (data) => (dispatch) => {

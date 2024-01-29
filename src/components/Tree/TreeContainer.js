@@ -2,10 +2,10 @@ import {compose} from "redux";
 import {connect} from "react-redux";
 import Tree from "./Tree";
 import {getAssessmentPa} from "../../redux/assessment-reducer"
+import {getPreviewData} from "../../redux/preview-reducer"
 
 let mapStateToProps = (state) => {
-    console.log('state');
-    console.log(state);
+    
     const pa_cats = [
         {name: 'self', title: 'Моя оценка'}, 
         {name: 'apprise', title: 'Оценка сотрудников'}, 
@@ -18,63 +18,44 @@ let mapStateToProps = (state) => {
     });
     pas_tree.sort = pa_cats;
     
-    state.tree.pas.forEach(element => {
-     
-        if(state.tree.assessment_user.id === element.person_id && element.type === "competence_appraisal" && element.status === "self") {
-            console.log(element.person_id.toString());
-            console.log("element.type = ");
-            console.log(element.type);
+    state.tree.pas.sort((a, b) => a.name.localeCompare(b.name)).forEach(element => {
+        if(state.tree.assessment_user.id === element.expert_person_id && element.type === "competence_appraisal") {
             switch(element.workflow_state) {
                 case 'Assessment':
-                    pas_tree['self'].push({ pa: element, btn_active: true, btn_text: 'Начать самооценку'});
+                    if(element.status === "self")
+                        pas_tree['self'].push({ pa: element, btn_active: true, btn_text: 'Начать самооценку', to: 'pa'});
+                    else
+                        pas_tree['apprise'].push({ pa: element, btn_active: false, btn_text: 'Дождитесь заполнения оценочных форм Оцениваемым', to: 'pa'});
                     break;
                 case 'Manager':
-                    pas_tree['self'].push({ pa: element, btn_active: false, btn_text: 'Ожидание оценки руководителя'});
+                    if(element.status === "manager")
+                        pas_tree['apprise'].push({ pa: element, btn_active: true, btn_text: 'Начать', to: 'pa'});
+                    else
+                        pas_tree['apprise'].push({ pa: element, btn_active: false, btn_text: 'Ожидание оценки руководителя', to: 'pa'});
                     break;
                 case 'Approval':
-                    pas_tree['self'].push({ pa: element, btn_active: false, btn_text: 'Ожидание оценки вышестоящего руководителя'});
+                    if(element.status === "expert")
+                        pas_tree['approve'].push({ pa: element, btn_active: true, btn_text: 'Посмотреть', to: 'preview'});
+                    else
+                        pas_tree['approve'].push({ pa: element, btn_active: false, btn_text: 'Ожидание оценки вышестоящего руководителя', to: 'preview'});
                     break;
                 case 'Comitet':
-                    pas_tree['self'].push({ pa: element, btn_active: false, btn_text: 'Ожидание оценочного собеседования'});
+                    if(element.status === "interview")
+                        pas_tree['comitet'].push({ pa: element, btn_active: true, btn_text: 'Начать', to: 'preview'});
+                    else
+                        pas_tree['comitet'].push({ pa: element, btn_active: false, btn_text: 'Ожидание оценочного собеседования', to: 'preview'});
                     break;
                 case 'End':
-                    pas_tree['self'].push({ pa: element, btn_active: true, btn_text: 'Оценка завершена'});
+                    pas_tree['apprise'].push({ pa: element, btn_active: true, btn_text: 'Оценка завершена', to: 'preview'});
                     break;
                 default:
-                    pas_tree['self'].push({ pa: element, btn_active: false, btn_text: 'Этап оценки не определен'});
-                    break;
-            }
-        }
-        else if(state.tree.assessment_user.id === element.expert_person_id && element.type === "competence_appraisal") {
-            switch(element.workflow_state) {
-                case 'Assessment':
-                    pas_tree['apprise'].push({ pa: element, btn_active: false, btn_text: 'Дождитесь заполнения оценочных форм Оцениваемым'});
-                    break;
-                case 'Manager':
-                    pas_tree['apprise'].push({ pa: element, btn_active: true, btn_text: 'Начать'});
-                    break;
-                case 'Approval':
-                    pas_tree['approve'].push({ pa: element, btn_active: true, btn_text: 'Посмотреть'});
-                    break;
-                case 'Comitet':
-                    pas_tree['comitet'].push({ pa: element, btn_active: false, btn_text: 'Ожидание оценочного собеседования'});
-                    break;
-                case 'End':
-                    pas_tree['apprise'].push({ pa: element, btn_active: true, btn_text: 'Оценка завершена'});
-                    break;
-                default:
-                    pas_tree['apprise'].push({ pa: element, btn_active: false, btn_text: 'Этап оценки не определен'});
+                    pas_tree['apprise'].push({ pa: element, btn_active: false, btn_text: 'Этап оценки не определен', to: 'pa'});
                     break;
             }
         }
     });
-    //'Моя оценка', 'Оценка сотрудников', 'Согласование оценки сотрудников','Провидение кадрового комитета'
 
     return {
-        //pas: state.assessment.pas.filter(x => x.type === 'competence_appraisal')
-        //    .sort((a, b) => a.name.localeCompare(b.name)),
-        //current_next_page_enabled: state.app.next_page_enabled,
-        //current_next_page_title: state.app.next_page_title,
         instructionContent: state.tree.instructionContent,
         pas_tree: pas_tree,
         assessment_user: state.tree.assessment_user,
@@ -83,7 +64,8 @@ let mapStateToProps = (state) => {
 }
 let mapDispatchToProps = (dispatch) => {
     return {
-        getPa: (pa_id) => dispatch(getAssessmentPa(pa_id,true))
+        getPa: (pa_id) => dispatch(getAssessmentPa(pa_id, true)),
+        getPreview: (plan_id) => dispatch(getPreviewData(plan_id))
     //    setNextButtonSettings: (val) => {
     //        dispatch(setNextButtonSettingsAC(val));
     //    },
