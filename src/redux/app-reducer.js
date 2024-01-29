@@ -16,7 +16,7 @@ let initialState = {
 }
 
 const appReducer = (state = initialState, action) => {
-    console.log(action);
+    // console.log(action);
     switch (action.type) {
         case INITIALIZED_SUCCESS:
             //console.log('init success');

@@ -9,7 +9,7 @@
       --color-dark-300: #4c4c4c;
       --color-dark-500: #333;
       --color-dark-900: #000;
-      --Base-Transparent-Black-15:#00000026;
+      --Base-Transparent-Black-15:rgba(0, 0, 0, 0.15);
 
    /* success */
     --color-success-100: #24A148;

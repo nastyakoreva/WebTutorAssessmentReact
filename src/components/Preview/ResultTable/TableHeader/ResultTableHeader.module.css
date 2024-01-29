@@ -6,7 +6,7 @@
     background-color: var(--Base-Grey-90);
     border-top-right-radius: 15px;
     border-top-left-radius: 15px;
-    border-bottom:2px solid var(--Base-Grey-80);
+    /* border-bottom:2px solid var(--Base-Grey-80); */
     .headerResultBlock{
         width: 50%;
         display: flex;
@@ -44,3 +44,23 @@
     };
 }
 
+.headerWithoutBoss{
+    .headerResultBlock{
+        width: 70%;
+        display: flex;
+        align-items: center;
+        box-sizing:border-box;
+        padding-left: 15px;
+    }
+    .headerStatusesBlock{
+        width: 30%;
+        display: flex;
+        align-items:center;
+        .headerStatusesBlockItem{
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            border-left: 2px solid var(--Base-Grey-80);
+        }
+    }
+}

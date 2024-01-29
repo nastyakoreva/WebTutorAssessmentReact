@@ -10,7 +10,7 @@ let initialState = {
 }
 
 const treeReducer = (state = initialState, action) => {
-    console.log(action);
+    // console.log(action);
     switch (action.type) {
         case SET_TREE_DATA:
             return {
@@ -32,7 +32,7 @@ const setTreeData = (data) => ({ type: SET_TREE_DATA, data });
 
 export const getTreeData = (appr_id) => (dispatch) => {
     assessmentAPI.getTreeData(appr_id).then(response => {
-        console.log(response);
+        // console.log(response);
         dispatch(setTreeData(response.data));
     })
 }

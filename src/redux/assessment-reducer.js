@@ -21,7 +21,7 @@ let initialState = {
 }
 
 const assessmentReducer = (state = initialState, action) => {
-    console.log(action);
+    // console.log(action);
     switch (action.type) {
         case SET_ASSESSMENT_PA:
             return {
@@ -104,15 +104,15 @@ const setAssessmentCompetence = (data) => ({ type: SET_ASSESSMENT_COMPETENCE, da
 
 export const getAssessmentPa = (pa_id, updatePrew) => (dispatch) => {
     assessmentAPI.getPaData(pa_id).then(response => {
-        console.log(response);
+        // console.log(response);
         dispatch(setAssessmentPa(response.data))
     }).then( () => { dispatch(setAppCurentPaAC(pa_id, updatePrew)) } ) 
 }
 
 export const sendCompetence = (data) => (dispatch) => {
     //debugger;
-    console.log(data);
-    console.log(data.attributes['role'].value);
+    // console.log(data);
+    // console.log(data.attributes['role'].value);
     let outputMessage = {};
     if(data.attributes['role'].value === 'mark') {
         outputMessage = {
@@ -159,7 +159,7 @@ export const sendCompetence = (data) => (dispatch) => {
         }
     }
     assessmentAPI.sendCompetence(outputMessage).then(response => {
-        console.log(outputMessage);
+        // console.log(outputMessage);
         if(response.data.status === 1) {
             dispatch(setAssessmentCompetence(response.data));
         }

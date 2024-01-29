@@ -14,7 +14,7 @@ let initialState = {
 }
 
 const previewReducer = (state = initialState, action) => {
-    console.log(action);
+    // console.log(action);
     switch (action.type) {
         case SET_PREVIEW:
             return {
@@ -36,7 +36,7 @@ const setPreview = (data) => ({ type: SET_PREVIEW, data });
 
 export const getPreviewData = (plan_id) => (dispatch) => {
     assessmentAPI.getPreviewData(plan_id).then(response => {
-        console.log(response);
+        // console.log(response);
         dispatch(setPreview(response.data))
     }).then( () => { dispatch(setAppCurentPaAC('preview', true)) } ) 
 }
