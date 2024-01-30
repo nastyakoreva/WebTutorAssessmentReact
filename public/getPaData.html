@@ -11,12 +11,15 @@ pa_doc = tools.open_doc(pa_id);
 pa_doc = pa_doc != undefined ? pa_doc.TopElem : null; 
 
 plan = ArrayOptFirstElem(XQuery("for $elem in assessment_plans where $elem/id = "+pa.assessment_plan_id+" return $elem"));
+plan_doc = tools.open_doc(pa.assessment_plan_id);
+plan_doc = plan_doc != undefined ? plan_doc.TopElem : null; 
 boss = ArrayOptFirstElem(XQuery("for $elem in collaborators where $elem/id = "+plan.boss_id+" return $elem"));
 
 result = {
     pa: pa,
     pa_doc: pa_doc,
     plan: plan,
+    plan_doc: plan_doc,
     boss: {
         boss_id: String(boss.id),
         fullname: String(boss.fullname),

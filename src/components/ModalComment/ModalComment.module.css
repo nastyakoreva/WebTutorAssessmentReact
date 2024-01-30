@@ -1,0 +1,94 @@
+.modal {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.25);
+    animation-name: appear;
+    animation-duration: 300ms;
+
+    .dialog {
+        width: 100%;
+        max-width: 550px;
+        background: #7092be;
+        position: relative;
+        /*margin: 0 20px;*/
+        max-height: calc(100vh - 80px);
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        -webkit-animation-name: animatetop;
+        -webkit-animation-duration: 0.4s;
+        animation-name: slide-in;
+        animation-duration: 0.5s;
+
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            justify-content: space-between;
+            color: white;
+
+            .title {
+                font-size: larger;
+            }
+
+            .close {
+                font-size: large;
+                font-weight: bold;
+                cursor: pointer;
+                padding: 1rem;
+                margin: -1rem -1rem -1rem auto;
+            }
+        }
+
+        .body {
+            margin: 0 8px;
+        }
+
+        .body > textarea {
+            width: 98%;
+            height: 150px;
+            resize: none;
+        }
+        .body > textarea:focus {
+            outline: none;
+        }
+
+        .footer {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            justify-content: flex-end;
+            .button {
+                background-color: white;
+                color: #262d30;
+                font-weight: bold;
+                border-radius: 10px;
+                overflow: hidden;
+                padding: 10px 15px;
+                margin: 0 10px;
+                cursor: pointer;
+            }
+            .buttonDisabled {
+                background-color: white;
+                color: #7c7c7c;
+                font-weight: bold;
+                border-radius: 10px;
+                overflow: hidden;
+                padding: 10px 15px;
+                margin: 0 10px;
+                cursor: default;
+            }
+        }
+    }
+}

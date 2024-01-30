@@ -6,9 +6,56 @@ Request.AddRespHeader( "Access-Control-Allow-Origin", "http://localhost:3000" );
 
 Env = Request.Session.Env;
 curUserID = Env.GetOptProperty("curUserID", null);
-//curUser = Env.GetOptProperty("curUser", null);
-alert('curUserID ' + tools.object_to_text( curUserID, "json" ));
+curUser = Env.GetOptProperty("curUser", null);
+//alert('curUserID ' + tools.object_to_text( global_settings, "json" ));
+//curUser = ArrayOptFirstElem(XQuery("for $elem in collaborators  where $elem/id = "+curUserID+" return $elem"));
 
+
+function setWFstateWithLog(docPlan, wf_state, cur_pas) {
+    var date = Date();
+    //alert('date ' + date);
+    workflowDoc = tools.open_doc( docPlan.TopElem.workflow_id ).TopElem;
+    var wf_log = docPlan.TopElem.workflow_log_entrys.AddChild();
+    wf_log.create_date = Date();
+    wf_log.action_id = 'set_workflow_state';
+    wf_log.person_id = curUserID;
+    wf_log.person_fullname = curUser.lastname + " " + curUser.firstname + " " + curUser.middlename;
+    wf_log.begin_state = docPlan.TopElem.workflow_state;
+    wf_log.submited = false;
+    docPlan.TopElem.workflow_state = wf_state;
+    docPlan.TopElem.workflow_state_name = docPlan.TopElem.get_workflow_state_name(workflowDoc);
+	wf_log.finish_state = docPlan.TopElem.workflow_state;
+    docPlan.Save();
+
+    for(pa in cur_pas) {
+        //alert('set manager pa.id' + pa.id);
+        docPa = tools.open_doc(pa.id);
+        docPa.TopElem.workflow_state = wf_state;
+        docPa.TopElem.workflow_state_name = docPa.TopElem.get_workflow_state_name(workflowDoc);
+        if(wf_state == 'Manager') {
+            if(docPa.TopElem.status == 'self')
+                docPa.TopElem.is_done = 1;
+            else
+                docPa.TopElem.is_done = 0;
+        }
+        if(wf_state == 'Approval') {
+            if(docPa.TopElem.status == 'manager' || docPa.TopElem.status == 'self')
+                docPa.TopElem.is_done = 1;
+            else if(docPa.TopElem.status != 'manager' && docPa.TopElem.status != 'self') {
+                docPa.TopElem.is_done = 0;
+            }
+        }
+        if(wf_state == 'Comitet') {
+            if(docPa.TopElem.status == 'expert')
+                docPa.TopElem.is_done = 1;
+        }
+        if(wf_state == 'End') {
+            if(docPa.TopElem.status == 'interview')
+                docPa.TopElem.is_done = 1;
+        }
+        docPa.Save();
+    }
+}
 
 result = {};
 status = 1;
@@ -166,8 +213,6 @@ if(xmlBody != null && xmlBody.data != null && xmlBody.data.mode == "put"
     //plan_workflow_state
     if(xmlBody.data.HasProperty("plan_workflow_state")) {
         plan_id = OptInt(xmlBody.data.plan_workflow_state.plan_id);
-        //pa_status = xmlBody.data.plan_workflow_state.pa_status;
-        //pa_expert = OptInt(xmlBody.data.plan_workflow_state.pa_expert);
         pa_person = OptInt(xmlBody.data.plan_workflow_state.pa_person);
         workflow_state = xmlBody.data.plan_workflow_state.workflow_state;
         comment = xmlBody.data.plan_workflow_state.comment;
@@ -182,21 +227,21 @@ if(xmlBody != null && xmlBody.data != null && xmlBody.data.mode == "put"
             if(workflow_state == 'Manager') {
                 //TODO уточнить про "вернуть на доработку", с каких этапов в какие разрешен переход
                 if(docPlan.TopElem.workflow_state == 'Assessment' || docPlan.TopElem.workflow_state == 'Approval') {
-                    docPlan.TopElem.workflow_state = 'Manager';
-                    docPlan.TopElem.workflow_state_name = docPlan.TopElem.get_workflow_state_name(workflowDoc);
-                    docPlan.Save();
-                    app_action = { page: 'tree', appr_id: String(docPlan.TopElem.assessment_appraise_id) };
-                    for(pa in cur_pas) {
-                        alert('set manager pa.id' + pa.id);
-                        docPa = tools.open_doc(pa.id);
-                        docPa.TopElem.workflow_state = 'Manager';
-                        docPa.TopElem.workflow_state_name = docPa.TopElem.get_workflow_state_name(workflowDoc);
-                        if(docPa.TopElem.status == 'self')
-                            docPa.TopElem.is_done = 1;
-                        else
-                            docPa.TopElem.is_done = 0;
-                        docPa.Save();
+
+                    if(comment != "") {
+                        _custom_comment = ArrayOptFind( docPlan.TopElem.custom_comments, 'person_id == '+Int(curUserID)+' && workflow_state == "Manager"');
+                        if (_custom_comment == undefined) {
+                            _custom_comment = docPlan.TopElem.custom_comments.AddChild();
+                            _custom_comment.person_id = Int(curUserID);
+                            _custom_comment.workflow_state = docPlan.TopElem.workflow_state;
+                        }
+                        _custom_comment.comment = Trim(comment);
+                        _custom_comment.comment_date = Date();
                     }
+
+                    setWFstateWithLog(docPlan, workflow_state, cur_pas);
+                    app_action = { page: 'tree', appr_id: String(docPlan.TopElem.assessment_appraise_id) };
+
                 }
                 else {
                     status = 0;
@@ -205,22 +250,8 @@ if(xmlBody != null && xmlBody.data != null && xmlBody.data.mode == "put"
             }
             if(workflow_state == 'Approval') {
                 if(docPlan.TopElem.workflow_state == 'Manager') {
-                    docPlan.TopElem.workflow_state = 'Approval';
-                    docPlan.TopElem.workflow_state_name = docPlan.TopElem.get_workflow_state_name(workflowDoc);
-                    docPlan.Save();
+                    setWFstateWithLog(docPlan, workflow_state, cur_pas);
                     app_action = { page: 'tree', appr_id: String(docPlan.TopElem.assessment_appraise_id) };
-                    for(pa in cur_pas) {
-                        alert('set approval pa.id' + pa.id);
-                        docPa = tools.open_doc(pa.id);
-                        docPa.TopElem.workflow_state = 'Approval';
-                        docPa.TopElem.workflow_state_name = docPa.TopElem.get_workflow_state_name(workflowDoc);
-                        if(docPa.TopElem.status == 'manager' || docPa.TopElem.status == 'self')
-                            docPa.TopElem.is_done = 1;
-                        else if(docPa.TopElem.status != 'manager' && docPa.TopElem.status != 'self') {
-                            docPa.TopElem.is_done = 0;
-                        }
-                        docPa.Save();
-                    }
                 }
                 else {
                     status = 0;
@@ -230,19 +261,8 @@ if(xmlBody != null && xmlBody.data != null && xmlBody.data.mode == "put"
             
             if(workflow_state == 'Comitet') {
                 if(docPlan.TopElem.workflow_state == 'Approval') {
-                    docPlan.TopElem.workflow_state = 'Comitet';
-                    docPlan.TopElem.workflow_state_name = docPlan.TopElem.get_workflow_state_name(workflowDoc);
-                    docPlan.Save();
+                    setWFstateWithLog(docPlan, workflow_state, cur_pas);
                     app_action = { page: 'tree', appr_id: String(docPlan.TopElem.assessment_appraise_id) };
-                    for(pa in cur_pas) {
-                        alert('set Comitet pa.id' + pa.id);
-                        docPa = tools.open_doc(pa.id);
-                        docPa.TopElem.workflow_state = 'Comitet';
-                        docPa.TopElem.workflow_state_name = docPa.TopElem.get_workflow_state_name(workflowDoc);
-                        if(docPa.TopElem.status == 'expert')
-                            docPa.TopElem.is_done = 1;
-                        docPa.Save();
-                    }
                 }
                 else {
                     status = 0;
@@ -252,19 +272,8 @@ if(xmlBody != null && xmlBody.data != null && xmlBody.data.mode == "put"
 
             if(workflow_state == 'End') {
                 if(docPlan.TopElem.workflow_state == 'Comitet') {
-                    docPlan.TopElem.workflow_state = 'End';
-                    docPlan.TopElem.workflow_state_name = docPlan.TopElem.get_workflow_state_name(workflowDoc);
-                    docPlan.Save();
+                    setWFstateWithLog(docPlan, workflow_state, cur_pas);
                     app_action = { page: 'tree', appr_id: String(docPlan.TopElem.assessment_appraise_id) };
-                    for(pa in cur_pas) {
-                        alert('set End pa.id' + pa.id);
-                        docPa = tools.open_doc(pa.id);
-                        docPa.TopElem.workflow_state = 'End';
-                        docPa.TopElem.workflow_state_name = docPa.TopElem.get_workflow_state_name(workflowDoc);
-                        if(docPa.TopElem.status == 'interview')
-                            docPa.TopElem.is_done = 1;
-                        docPa.Save();
-                    }
                 }
                 else {
                     status = 0;

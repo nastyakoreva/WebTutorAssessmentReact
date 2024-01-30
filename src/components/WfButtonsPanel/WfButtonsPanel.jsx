@@ -1,5 +1,6 @@
 import React from "react";
-import css from './WfButtonsPanel.module.css'
+import css from './WfButtonsPanel.module.css';
+import ModalComment from '../ModalComment/ModalComment';
 
 const WfButtonsPanel = (props) => {
     console.log(props)
@@ -12,7 +13,7 @@ const WfButtonsPanel = (props) => {
         props.goNextPa(props.pa_id_next, props.plan_id);
     }
     const WFsetManagerHandler = () => {
-        props.sendWFstate({plan_id: props.plan.id, workflow_state: 'Manager', comment: ''});
+        props.sendWFstate({plan_id: props.plan.id, workflow_state: 'Manager', comment: wf_comment});
     }
     const WFsetApprovalHandler = () => {
         props.sendWFstate({plan_id: props.plan.id, workflow_state: 'Approval', comment: ''});
@@ -23,13 +24,19 @@ const WfButtonsPanel = (props) => {
     const WFsetEndHandler = () => {
         props.sendWFstate({plan_id: props.plan.id, workflow_state: 'End', comment: ''});
     }
+
+    const [visibleModal, setModal] = React.useState(false);
+    const onCloseModal = () => setModal(false);
+    const [wf_comment, setWFcomment] = React.useState('');
+    const onChangeWFcomment = (e) => setWFcomment(e.target.value);
+
     return <div className={css.wfButtonsPanel}>
         {/*!props.plan && <div className={css.wfButton} onClick={backClickHandler}>Назад</div>*/}
         {BackBtnEnabled &&
             <div className={css.wfButton} onClick={backClickHandler}>Назад</div>}
 
         {WFbuttonsEnable && props.plan.workflow_state === 'Approval' 
-            && <div className={css.wfButton} onClick={WFsetManagerHandler}>Вернуть на доработку</div>}
+            && <div className={css.wfButton} onClick={() => setModal(true)/*WFsetManagerHandler*/}>Вернуть на доработку</div>}
 
         <div className={css.grow}></div>
         <div className={css.wfButton} onClick={props.backToTree}>Сохранить и выйти</div>
@@ -49,6 +56,9 @@ const WfButtonsPanel = (props) => {
             && <div className={css.wfButton} onClick={ () => { alert('печать') } }>Печать</div>}
         {/*props.plan && props.hr && props.curUserId === props.hr.hr_id*/WFbuttonsEnable && props.plan.workflow_state === 'Comitet' 
             && <div className={css.wfButton} onClick={WFsetEndHandler}>Завершить оценку</div>}
+
+        <ModalComment visible={visibleModal} onClose={onCloseModal} onChangeComment={onChangeWFcomment} curComment={wf_comment}
+            title="Укажие причину возврата оценки на доработку" onSend={WFsetManagerHandler}/>
     </div>
 
 }
