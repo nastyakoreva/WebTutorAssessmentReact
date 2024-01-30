@@ -229,12 +229,12 @@ if(xmlBody != null && xmlBody.data != null && xmlBody.data.mode == "put"
                 if(docPlan.TopElem.workflow_state == 'Assessment' || docPlan.TopElem.workflow_state == 'Approval') {
 
                     if(comment != "") {
-                        _custom_comment = ArrayOptFind( docPlan.TopElem.custom_comments, 'person_id == '+Int(curUserID)+' && workflow_state == "Manager"');
-                        if (_custom_comment == undefined) {
+                      // _custom_comment = ArrayOptFind( docPlan.TopElem.custom_comments, 'person_id == '+Int(curUserID)+' && workflow_state == "Manager"');
+                      // if (_custom_comment == undefined) {
                             _custom_comment = docPlan.TopElem.custom_comments.AddChild();
                             _custom_comment.person_id = Int(curUserID);
                             _custom_comment.workflow_state = docPlan.TopElem.workflow_state;
-                        }
+                        //}
                         _custom_comment.comment = Trim(comment);
                         _custom_comment.comment_date = Date();
                     }

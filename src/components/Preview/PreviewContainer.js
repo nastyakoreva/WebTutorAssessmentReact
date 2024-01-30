@@ -35,7 +35,7 @@ const getPaTypeName = (state) => {
 let mapStateToProps = (state) => {
 
     return {
-        pa: state.assessment.pa,
+        pa: state.assessment.pa,       
         //pa_doc: state.assessment.pa_doc,
         //plan: state.assessment.plan,
         workflow_states: state.tree.workflow_states,
@@ -51,6 +51,7 @@ let mapStateToProps = (state) => {
         //plan_id: state.assessment.pa_doc.assessment_plan_id
         //workflow_states: state.preview.workflow?.state,
         plan: state.preview.plan,
+        plan_doc: state.assessment.plan_doc,
         plan_pas: state.preview.plan_pas,
         competence_scales: state.preview.competence_scales,
         indicator_scales: state.preview.indicator_scales,

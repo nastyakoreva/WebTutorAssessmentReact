@@ -1,0 +1,16 @@
+.comments {
+    display: flex;
+    flex-direction: column;
+    background-color:#ffb3b8;
+    width: 90%;
+    border-radius: 1.2rem;
+    overflow: hidden;
+    margin: 10px 0px 10px 0px;
+    .comment {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        flex-wrap: nowrap;
+        margin: 10px;
+    }
+}

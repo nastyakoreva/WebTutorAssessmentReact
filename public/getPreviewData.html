@@ -9,7 +9,6 @@ Request.AddRespHeader( "Access-Control-Allow-Headers", "Access-Control-Allow-Hea
 
 plan_id = OptInt(Request.QueryString.GetOptProperty("plan_id"));
 plan = ArrayOptFirstElem(XQuery("for $elem in assessment_plans where $elem/id = "+plan_id+" return $elem"));
-
 if(plan != undefined) {
     plan_pas = XQuery("for $elem in pas where $elem/assessment_plan_id = "+plan.id+" return $elem");
 
