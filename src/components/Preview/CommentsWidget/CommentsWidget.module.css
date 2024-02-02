@@ -6,11 +6,30 @@
     border-radius: 1.2rem;
     overflow: hidden;
     margin: 10px 0px 10px 0px;
+    .header {
+        font-weight: bold;
+        margin: 10px 0 0 10px;
+    }
     .comment {
         display: flex;
         flex-direction: row;
         align-items: center;
         flex-wrap: nowrap;
         margin: 10px;
+        border-bottom: 1px solid #030303;;
+        .user {
+            display: block;
+            margin-right: 10px;
+            .position {
+                font-style: italic;
+            }    
+
+        }
+        .date {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
     }
+    
 }

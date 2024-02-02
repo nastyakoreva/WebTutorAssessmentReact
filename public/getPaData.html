@@ -13,13 +13,29 @@ pa_doc = pa_doc != undefined ? pa_doc.TopElem : null;
 plan = ArrayOptFirstElem(XQuery("for $elem in assessment_plans where $elem/id = "+pa.assessment_plan_id+" return $elem"));
 plan_doc = tools.open_doc(pa.assessment_plan_id);
 plan_doc = plan_doc != undefined ? plan_doc.TopElem : null; 
+plan_comments = [];
+
+for(elem in plan_doc.custom_comments){
+    persDoc = tools.open_doc(elem.person_id).TopElem;
+    workflowDoc = tools.open_doc(plan_doc.workflow_id ).TopElem;
+    objWfStateName = ArrayOptFirstElem(ArraySelect(workflowDoc.states.state, "code == '"+elem.workflow_state+"'"));
+    wfStateName = objWfStateName != undefined ? String(objWfStateName.name) : "Этап не определен";
+    plan_comments.push({
+        person_id: String(elem.person_id),
+        person_fio: persDoc.lastname + " "+persDoc.firstname + " " + persDoc.middlename,
+        person_position: String(persDoc.position_name),
+        comment_date: StrDate(elem.comment_date, true),
+        comment: String(elem.comment),
+        workflow_state: wfStateName
+    });
+}
 boss = ArrayOptFirstElem(XQuery("for $elem in collaborators where $elem/id = "+plan.boss_id+" return $elem"));
 
 result = {
     pa: pa,
     pa_doc: pa_doc,
     plan: plan,
-    plan_doc: plan_doc,
+    plan_comments: plan_comments,
     boss: {
         boss_id: String(boss.id),
         fullname: String(boss.fullname),

@@ -14,8 +14,8 @@ const Preview = (props) => {
             <WfButtonsPanel backToTree={props.backToTree} goPrewPa={props.goPrewPa} plan={props.plan} curUserId={props.curUserId} 
                 hr={props.hr} sendWFstate={props.sendWFstate} pa_curr_expert_id={props.pa_curr_expert_id}/>
             
-            {props.plan_doc.custom_comments.custom_comment !== undefined &&
-                <CommentsWidget comments={props.plan_doc.custom_comments.custom_comment}/>}
+            {props.plan_comments.length > 0 &&
+                <CommentsWidget comments={props.plan_comments}/>}
             
             <ResultTable plan={props.plan} plan_pas={props.plan_pas} competence_scales={props.competence_scales} 
                 indicator_scales={props.indicator_scales} question_scales={props.question_scales}/>
