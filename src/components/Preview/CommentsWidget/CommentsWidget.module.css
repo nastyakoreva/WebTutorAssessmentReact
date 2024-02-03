@@ -15,8 +15,8 @@
         flex-direction: row;
         align-items: center;
         flex-wrap: nowrap;
-        margin: 10px;
-        border-bottom: 1px solid #030303;;
+        padding: 10px;
+        border-top: 1px solid #da8187;
         .user {
             display: block;
             margin-right: 10px;
@@ -28,8 +28,12 @@
         .date {
             margin-right: 10px;
             font-weight: bold;
+            flex-wrap: wrap;
+            max-width: 100px;
         }
-        
+        .content {
+            flex-grow: 1;
+        }
     }
     
 }

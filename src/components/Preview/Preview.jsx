@@ -4,6 +4,7 @@ import WorkflowWiget from "../WorkflowWiget/WorkflowWiget";
 import WfButtonsPanel from "../WfButtonsPanel/WfButtonsPanel";
 import ResultTable from "./ResultTable/ResultTable";
 import CommentsWidget from "./CommentsWidget/CommentsWidget";
+import NumParamsPanel from "./NumParamsPanel/NumParamsPanel";
 
 const Preview = (props) => {
     console.log(props);
@@ -14,6 +15,8 @@ const Preview = (props) => {
             <WfButtonsPanel backToTree={props.backToTree} goPrewPa={props.goPrewPa} plan={props.plan} curUserId={props.curUserId} 
                 hr={props.hr} sendWFstate={props.sendWFstate} pa_curr_expert_id={props.pa_curr_expert_id}/>
             
+            <NumParamsPanel/>
+
             {props.plan_comments.length > 0 &&
                 <CommentsWidget comments={props.plan_comments}/>}
             

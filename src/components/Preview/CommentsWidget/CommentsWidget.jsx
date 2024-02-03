@@ -9,7 +9,7 @@ const CommentsWidget = (props) => {
                 <div className={css.position}>{c.person_position}</div>
             </div>
             <div className={css.date}>{c.comment_date}</div>
-            <div>{c.comment}</div>
+            <div className={css.content}>{c.comment}</div>
         </div>)
     return (
 
