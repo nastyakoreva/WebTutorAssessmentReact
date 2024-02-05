@@ -1,39 +1,47 @@
 .comments {
-    display: flex;
-    flex-direction: column;
+    display: block;
     background-color:#ffb3b8;
     width: 90%;
     border-radius: 1.2rem;
     overflow: hidden;
     margin: 10px 0px 10px 0px;
     .header {
-        font-weight: bold;
-        margin: 10px 0 0 10px;
-    }
-    .comment {
         display: flex;
         flex-direction: row;
-        align-items: center;
-        flex-wrap: nowrap;
+        font-weight: bold;
+        margin: 10px 0 0 10px;
+        .dialogIcon {
+            background-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='utf-8'%3F%3E%3C!-- Uploaded to: SVG Repo  www.svgrepo.com  Generator: SVG Repo Mixer Tools --%3E%3C!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'%3E%3Csvg fill='%23000000' version='1.1' id='Ebene_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'  width='800px' height='800px' viewBox='0 0 64 64' enable-background='new 0 0 64 64' xml:space='preserve'%3E%3Cg%3E%3Cpath d='M32 32c3.309 0 6-2.691 6-6s-2.691-6-6-6s-6 2.691-6 6S28.691 32 32 32z M32 24c1.103 0 2 0.897 2 2s-0.897 2-2 2s-2-0.897-2-2S30.897 24 32 24z'/%3E%3Cpath d='M16 32c3.309 0 6-2.691 6-6s-2.691-6-6-6s-6 2.691-6 6S12.691 32 16 32z M16 24c1.103 0 2 0.897 2 2s-0.897 2-2 2s-2-0.897-2-2S14.897 24 16 24z'/%3E%3Cpath d='M48 32c3.309 0 6-2.691 6-6s-2.691-6-6-6s-6 2.691-6 6S44.691 32 48 32z M48 24c1.103 0 2 0.897 2 2s-0.897 2-2 2s-2-0.897-2-2S46.897 24 48 24z'/%3E%3Cpath d='M62 3H2C0.896 3 0 3.896 0 5v42c0 1.104 0.896 2 2 2h14v10c0 0.781 0.455 1.491 1.164 1.817C17.432 60.94 17.716 61 18 61c0.469 0 0.933-0.165 1.302-0.481L32.74 49H62c1.104 0 2-0.896 2-2V5C64 3.896 63.104 3 62 3z M60 45H32c-0.478 0-0.939 0.171-1.302 0.481L20 54.651V47c0-1.104-0.896-2-2-2H4V7h56V45z'/%3E%3C/g%3E%3C/svg%3E");
+            width: 24px;
+            height: 24px;
+            background-size: 24px 24px;
+            background-repeat: no-repeat;
+            background-position: center center;
+            margin: 0 10px 0 0;
+        }
+    }
+    .commentGrid {
+        display: grid;
+        grid-template-columns: 300px 100px auto;
+        align-items: stretch;
         padding: 10px;
-        border-top: 1px solid #da8187;
         .user {
             display: block;
-            margin-right: 10px;
+            padding-right: 10px;
+            border-top: 1px solid #da8187;
             .position {
                 font-style: italic;
-            }    
-
+            }
         }
         .date {
-            margin-right: 10px;
+            padding-right: 10px;
             font-weight: bold;
             flex-wrap: wrap;
             max-width: 100px;
+            border-top: 1px solid #da8187;
         }
         .content {
-            flex-grow: 1;
+            border-top: 1px solid #da8187;
         }
     }
-    
 }
