@@ -1,8 +1,8 @@
 import {compose} from "redux";
 import {connect} from "react-redux";
 import Assessment from "./Assessment";
-import {setAppCurentPaAC, updateAppPrewPa} from "../../redux/app-reducer";
-import { getAssessmentPa, sendCompetence } from "../../redux/assessment-reducer";
+import {setAppCurentPaAC, updateAppPrewPa, setNextButtonSettingsAC} from "../../redux/app-reducer";
+import {getAssessmentPa, sendCompetence} from "../../redux/assessment-reducer";
 import {getPreviewData} from "../../redux/preview-reducer";
 
 const pa_roadmap = ['competence_appraisal', 'position_appraisal', 'staffrating'/*, 'development_plan'*/]; //TODO маршрут оценки (типы pa для кнопки далее)
@@ -34,6 +34,8 @@ const getPaTypeName = (state) => {
 let mapStateToProps = (state) => {
 
     return {
+        next_enabled: state.app.next_enabled,
+        next_title: state.app.next_title,
         pa: state.assessment.pa,
         pa_doc: state.assessment.pa_doc,
         plan: state.assessment.plan,
@@ -55,10 +57,10 @@ let mapDispatchToProps = (dispatch, ownProps) => {
 
     return {
         backToTree: () => { dispatch(setAppCurentPaAC('tree')) },
-        goPrewPa:()=>{
+        goPrewPa: () => {
             if(ownProps.prew_pa.length>0){
-                let lastInPrew_pa = ownProps.prew_pa[ownProps.prew_pa.length-1]
-                if(lastInPrew_pa ==='tree'){
+                let lastInPrew_pa = ownProps.prew_pa[ownProps.prew_pa.length - 1]
+                if(lastInPrew_pa === 'tree'){
                     dispatch(setAppCurentPaAC('tree'))
                 }else{
 
@@ -69,7 +71,10 @@ let mapDispatchToProps = (dispatch, ownProps) => {
 
         },
         goNextPa: (pa_id, plan_id) => { pa_id === 'preview' ? dispatch(getPreviewData(plan_id)) : dispatch(getAssessmentPa(pa_id, true))},
-        sendCompetence: (data) => { dispatch(sendCompetence(data)) }
+        sendCompetence: (data) => { dispatch(sendCompetence(data)) },
+        setNextButtonSettings: (val) => {
+            dispatch(setNextButtonSettingsAC(val));
+        }
     }
 }
 

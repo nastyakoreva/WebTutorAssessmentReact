@@ -9,10 +9,16 @@ import QuestionWidget from "./QuestionWidget/QuestionWidget";
 
 const Assessment = (props) => {
 
+    let haveCommentsErr = false;
+
     const competences = props.pa_doc.competences.competence !== undefined &&
     props.pa_doc.competences.competence.filter(c => c.indicators.indicator === undefined).map(comp =>
-        <CompetenceWidget competence={comp} pa_doc={props.pa_doc} sendCompetence={props.sendCompetence}
-            competence_scale={props.competence_scales.find(x => x.id === comp.competence_id)}/>)  
+        {
+            if (!haveCommentsErr) {
+                haveCommentsErr = (comp.mark_text === '0' || comp.mark_text === '1') && comp.comment === '';
+            }
+        return <CompetenceWidget competence={comp} pa_doc={props.pa_doc} sendCompetence={props.sendCompetence}
+            competence_scale={props.competence_scales.find(x => x.id === comp.competence_id)} />})  
     
     const competence_indicators = props.pa_doc.competences.competence !== undefined &&
         props.pa_doc.competences.competence.filter(c => c.indicators.indicator !== undefined).map(x =>
@@ -22,10 +28,28 @@ const Assessment = (props) => {
     const questions = props.pa_doc.supplementary_questions.supplementary_question?.map(quest => 
         <QuestionWidget question={quest} pa_doc={props.pa_doc} sendCompetence={props.sendCompetence}
             question_scale={props.question_scales.find(x => x.id === quest.supplementary_question_id)}/>)
+    
+    let haveCompetenceNull = false;
+    if(props.pa_doc.competences.competence !== undefined) {
+        haveCompetenceNull = props.pa_doc.competences.competence.find(c => c.indicators.indicator === undefined 
+            && (c.mark === '' || c.mark === 'N')) !== undefined;
+    }
+    if(props.next_title !== 'Указаны не все оценки' && haveCompetenceNull) {
+        props.setNextButtonSettings({next_enabled: false, next_title: 'Указаны не все оценки'});
+    }
+    if(props.next_title !== 'Указаны не все оценки' && props.next_title !== 'Указаны не все комментарии' && haveCommentsErr) {
+        props.setNextButtonSettings({next_enabled: false, next_title: 'Указаны не все комментарии'});
+    }
+    if(!props.next_enabled && !haveCompetenceNull && !haveCommentsErr) {
+        props.setNextButtonSettings({next_enabled: true, next_title: ''});
+    }
+    console.log('haveCompetenceNull ' + haveCompetenceNull);
+    console.log('haveCommentsErr ' + haveCommentsErr);
 
     return <div className={css.assessment}>
         <WorkflowWiget workflow_states={props.workflow_states} pa={props.pa} boss={props.boss} expert={props.expert} hr={props.hr}/>
-        <WfButtonsPanel backToTree={props.backToTree} goNextPa={props.goNextPa} goPrewPa={props.goPrewPa} pa_id_next={props.pa_id_next} plan_id={props.plan_id}/>
+        <WfButtonsPanel backToTree={props.backToTree} goNextPa={props.goNextPa} goPrewPa={props.goPrewPa} pa_id_next={props.pa_id_next} 
+            plan_id={props.plan_id} next_enabled={props.next_enabled} next_title = {props.next_title}/>
         <div className={css.title}>{props.pa_type_title}</div>
         {props.instruction && <PaTypeInstruction instruction={props.instruction}></PaTypeInstruction>}
         {competences}

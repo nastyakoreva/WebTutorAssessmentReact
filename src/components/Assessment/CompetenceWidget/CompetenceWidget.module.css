@@ -77,6 +77,9 @@
                 height: 150px;
                 resize: none;
             }
+            .right > textarea.validationErr {
+                border: 2px solid red;
+            }
         }
     }
 }

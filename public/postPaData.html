@@ -89,7 +89,8 @@ if(xmlBody != null && xmlBody.data != null && xmlBody.data.mode == "put"
                 wt_answer.push({
                     pa_id: pa_id,
                     comp_id: comp_id,
-                    mark: value
+                    mark: value,
+                    mark_text: mark_text
                 });
                 docPa.Save();
             }

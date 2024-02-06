@@ -12,6 +12,16 @@
         margin: 10px;
         cursor: pointer;
     }
+    .wfButtonDisabled {
+        background-color: rgb(106, 103, 103);
+        color: #262d30;
+        font-weight: bold;
+        border-radius: 10px;
+        overflow: hidden;
+        padding: 10px 15px;
+        margin: 10px;
+        cursor: default;
+    }
     .grow {
         flex-grow: 1;
     }

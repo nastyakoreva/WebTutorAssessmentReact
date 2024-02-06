@@ -6,15 +6,18 @@ const CompetenceWidget = (props) => {
     function createMarkup() {
         return {__html: props.competence_scale.desc.trim()};
     }
+
     const [curComment, setCurComment] = useState(props.competence.comment);
     const  onChangeComment = (e) => setCurComment(e.target.value);
 
     const scales = props.competence_scale.scales.scale.map(s => <label className={css.item} key={s.id}>
         <input type={"radio"} value={s.id} name={props.pa_doc.id} comp_id={props.competence.competence_id} role="mark"
-            checked={s.id === props.competence.mark}
+            checked={s.id === props.competence.mark} title={s.name}
             onChange={(e) => {props.sendCompetence(e.currentTarget)}}/>
         <i></i><div className={css.competence_desc}>{s.desc}</div>
     </label>);
+
+    const needComment = (props.competence.mark_text === '0' || props.competence.mark_text === '1') && curComment === '';
 
     return <div className={css.wiget}>
         <div className={css.header}>
@@ -30,7 +33,8 @@ const CompetenceWidget = (props) => {
                     <textarea value={curComment}
                         name={props.pa_doc.id} comp_id={props.competence.competence_id} role="comment"
                         onChange={onChangeComment}
-                        onBlur={(e) => props.sendCompetence(e.currentTarget)}/>
+                        onBlur={(e) => props.sendCompetence(e.currentTarget)}
+                        className={needComment && css.validationErr}/>
                 </div>
             </div>
             

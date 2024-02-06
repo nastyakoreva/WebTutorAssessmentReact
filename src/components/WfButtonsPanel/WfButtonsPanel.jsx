@@ -40,7 +40,8 @@ const WfButtonsPanel = (props) => {
 
         <div className={css.grow}></div>
         <div className={css.wfButton} onClick={props.backToTree}>Сохранить и выйти</div>
-        {props.pa_id_next && <div className={css.wfButton} onClick={nextClickHandler}>Далее</div>}
+        {props.next_enabled && props.pa_id_next && <div className={css.wfButton} onClick={nextClickHandler}>Далее</div>}
+        {!props.next_enabled && props.pa_id_next && <div className={css.wfButtonDisabled} title={props.next_title}>Далее</div>}
 
         {WFbuttonsEnable && props.plan.workflow_state === 'Assessment' 
             && <div className={css.wfButton} onClick={WFsetManagerHandler}>Завершить заполнение</div>}

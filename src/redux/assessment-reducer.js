@@ -53,6 +53,7 @@ const assessmentReducer = (state = initialState, action) => {
                                 if(comp.competence_id === wt_answer.comp_id) {
                                     if(wt_answer.mark !== undefined) {
                                         comp.mark = wt_answer.mark;
+                                        comp.mark_text = wt_answer.mark_text;
                                     }
                                     if(wt_answer.comment !== undefined) {
                                         comp.comment = wt_answer.comment;

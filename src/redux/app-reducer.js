@@ -11,8 +11,8 @@ let initialState = {
     current_pa: null,
     prew_pa: [],
     //page_name: "Экспертная оценка квалификации",
-    //next_page_enabled: true,
-    //next_page_title: ''
+    next_enabled: true,
+    next_title: ''
 }
 
 const appReducer = (state = initialState, action) => {
@@ -61,8 +61,8 @@ const appReducer = (state = initialState, action) => {
         case SET_NEXT_BUTTON_SETTINGS:
             return {
                 ...state,
-                next_page_enabled: action.nextButtonSettings.next_page_enabled,
-                next_page_title: action.nextButtonSettings.next_page_title
+                next_enabled: action.nextButtonSettings.next_enabled,
+                next_title: action.nextButtonSettings.next_title
             }
         default:
             return state;
