@@ -15,7 +15,7 @@ const Preview = (props) => {
             <WfButtonsPanel backToTree={props.backToTree} goPrewPa={props.goPrewPa} plan={props.plan} curUserId={props.curUserId} 
                 hr={props.hr} sendWFstate={props.sendWFstate} pa_curr_expert_id={props.pa_curr_expert_id}/>
             
-            <NumParamsPanel score={props}/>
+            <NumParamsPanel score={props.arr_score}/>
 
             {props.plan_comments.length > 0 &&
                 <CommentsWidget comments={props.plan_comments}/>}

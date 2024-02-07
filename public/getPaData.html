@@ -14,7 +14,6 @@ plan = ArrayOptFirstElem(XQuery("for $elem in assessment_plans where $elem/id = 
 plan_doc = tools.open_doc(pa.assessment_plan_id);
 plan_doc = plan_doc != undefined ? plan_doc.TopElem : null; 
 plan_comments = [];
-itog_score = {};
 arr_score = [];
 
 for(elem in plan_doc.custom_comments){
@@ -31,8 +30,113 @@ for(elem in plan_doc.custom_comments){
         workflow_state: wfStateName
     });
 }
-alert("String(plan_doc.custom_elems.ObtainChildByKey('post_develop_group').value) = "+String(plan_doc.custom_elems.ObtainChildByKey('post_develop_group').value));
-itog_score = {name: 'Группа развития', value: String(plan_doc.custom_elems.ObtainChildByKey('post_develop_group').value)};
+//заполняем поля для виджетов итоговой оценки 
+for (customElem in plan_doc.custom_elems.custom_elem) {
+    if(customElem.name=="post_develop_group" ) { 
+        descript = "--";     
+        itog_score = String(customElem.value);
+        switch (itog_score){
+            case 'III BR':
+            case 'III B': 
+                descript = 'Профессионал';
+                break;
+            case 'III AR':
+            case  'III A':
+                descript = 'Резерв';
+                break;
+            case 'II B':
+            case 'II A':
+                descript = 'Новички';
+                break;
+            case 'I B':
+                descript = 'Будущий проф.';
+                break;
+            case 'I A':
+                descript = 'Потенциал';
+                break;
+            case 'I':
+                descript = 'Группа контроля';
+                break;
+            default:
+                descript = 'Новички';
+                break;
+        }
+        arr_score.push({title: 'Группа развития',
+                        val: itog_score,
+                        desc: descript,
+                        order: 1});
+    }
+    if(customElem.name=="IQ" ) {
+        arr_score.push({title: 'Оценка IQ',
+        val: String(customElem.value),
+        order: 5
+       });
+    }
+    if(customElem.name=="hogan" ) {
+        arr_score.push({title: 'Hogan',
+        val: String(customElem.value),
+        order: 6
+       });
+    }		
+    if(customElem.name=="assess_position") {// оценка соотв должности
+        assesPosit = String(customElem.value);
+        descript = "--";
+        if (OptReal(assesPosit,0) <= 1.7)
+            descript = 'Зона роста';
+        else{
+            if (OptReal(assesPosit,0) <= 2.7 && OptReal(assesPosit,0) > 1.7)
+                descript = 'Частичное';
+                else{
+                    if (OptReal(assesPosit,0) > 2.7) 
+                        descript = 'Полное';
+                }
+        }
+        arr_score.push({title: 'Соответствие',
+                        val: assesPosit,
+                        desc: descript,
+                        order: 2
+                        });
+    }
+    if(customElem.name=="assess_result" ) {//оценка результативности
+        assesResult = String(customElem.value);
+        descript = "--";
+        if (OptReal(assesResult,0) == 1)
+            descript = 'Не результативен';
+            else{
+                if (OptReal(assesResult,0) == 2)
+                    descript = 'Результативен';
+                    else {
+                        if (OptReal(assesResult,0) == 3)
+                            descript = 'Выше ожиданий';
+                    }
+            }
+        arr_score.push({title: 'Результативность',
+                        val: assesResult,
+                        desc: descript,
+                        order: 3
+                        });
+    }	
+    if(customElem.name=="assess_potential" ) {//оценка потенциала
+        assesPoten = String(customElem.value);
+        descript = "--";
+        if (OptReal(assesPoten,0) <= 1.7)
+            descript = 'Реализован';
+        else{
+            if (OptReal(assesPoten,0) <= 2.7 && OptReal(assesPoten,0) > 1.7)
+                descript = 'В должности';
+                else{
+                    if (OptReal(assesPoten,0) > 2.7) 
+                        descript = 'Потенциал';
+                }
+        }                                      
+        arr_score.push({title: 'Потенциал',
+                        val: assesPoten,
+                        desc: descript,
+                        order: 4
+                        });
+    }			
+}
+
 boss = ArrayOptFirstElem(XQuery("for $elem in collaborators where $elem/id = "+plan.boss_id+" return $elem"));
 
 result = {
@@ -40,7 +144,7 @@ result = {
     pa_doc: pa_doc,
     plan: plan,
     plan_comments: plan_comments,
-    itog_score: itog_score,
+    arr_score: ArraySort(arr_score, 'This.order', '+'),
     boss: {
         boss_id: String(boss.id),
         fullname: String(boss.fullname),

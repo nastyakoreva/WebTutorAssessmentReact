@@ -4,7 +4,7 @@ import NumParamWidget from "./NumParamWidget/NumParamWidget";
 
 const NumParamsPanel = (props) => {
     console.log(props);
-    let params = [];
+   /* let params = [];
     params.push({
         title: 'Группа развития',
         val: null,
@@ -40,8 +40,8 @@ const NumParamsPanel = (props) => {
         val: '48',
         desc: null,
         date: null
-    })
-    const paramWidgets = params.map(p => <NumParamWidget title={p.title} val={p.val} desc={p.desc} date={p.date}/>)
+    })*/
+    const paramWidgets = props.score.map(p => <NumParamWidget title={p.title} val={p.val} desc={p.desc} date={p.date}/>)
     return (
         <div className={css.numParamsPanel}>
             {paramWidgets}
