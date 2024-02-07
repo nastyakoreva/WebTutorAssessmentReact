@@ -1,7 +1,16 @@
 :root {
     /* base */
     --color-base-100: #878D96;
-   
+    --Base-White:#fff;
+      /* Base-Grey */
+      --Base-Grey-80: #343A3F;
+      --Base-Grey-90: #21272A;
+      --color-dark-100: #808080;
+      --color-dark-300: #4c4c4c;
+      --color-dark-500: #333;
+      --color-dark-900: #000;
+      --Base-Transparent-Black-15:rgba(0, 0, 0, 0.15);
+
    /* success */
     --color-success-100: #24A148;
    
@@ -21,12 +30,4 @@
    
      /* light */
     --color-light-100: #fff;
-
-   
-     /* dark */
-    --color-dark-100: #808080;
-    --color-dark-300: #4c4c4c;
-    --color-dark-500: #333;
-    --color-dark-700: #21272A;
-    --color-dark-900: #000;
   }

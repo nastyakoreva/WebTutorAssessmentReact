@@ -1,0 +1,6 @@
+.resultTableContentContainer{
+    width: 100%;
+    background-color: var( --Base-White);
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}

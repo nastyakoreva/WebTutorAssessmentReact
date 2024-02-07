@@ -6,7 +6,7 @@ import {initializeApp} from "./redux/app-reducer";
 import AssessmentContainer from "./components/Assessment/AssessmentContainer";
 import Header from "./components/Header/Header";
 import PreviewContainer from "./components/Preview/PreviewContainer";
-//import './common/styles/index.module.css'
+import './common/styles/index.module.css'
 
 class App extends React.Component {
 

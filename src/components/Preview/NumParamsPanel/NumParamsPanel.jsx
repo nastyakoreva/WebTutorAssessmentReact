@@ -3,11 +3,12 @@ import css from "./NumParamsPanel.module.css";
 import NumParamWidget from "./NumParamWidget/NumParamWidget";
 
 const NumParamsPanel = (props) => {
+    console.log(props);
     let params = [];
     params.push({
         title: 'Группа развития',
         val: null,
-        desc: 'III профессионалы',
+        desc: props.score.itog_score.value,
         date: 'май 2023'
     })
     params.push({

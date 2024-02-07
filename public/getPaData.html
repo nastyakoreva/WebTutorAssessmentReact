@@ -14,6 +14,8 @@ plan = ArrayOptFirstElem(XQuery("for $elem in assessment_plans where $elem/id = 
 plan_doc = tools.open_doc(pa.assessment_plan_id);
 plan_doc = plan_doc != undefined ? plan_doc.TopElem : null; 
 plan_comments = [];
+itog_score = {};
+arr_score = [];
 
 for(elem in plan_doc.custom_comments){
     persDoc = tools.open_doc(elem.person_id).TopElem;
@@ -29,6 +31,8 @@ for(elem in plan_doc.custom_comments){
         workflow_state: wfStateName
     });
 }
+alert("String(plan_doc.custom_elems.ObtainChildByKey('post_develop_group').value) = "+String(plan_doc.custom_elems.ObtainChildByKey('post_develop_group').value));
+itog_score = {name: 'Группа развития', value: String(plan_doc.custom_elems.ObtainChildByKey('post_develop_group').value)};
 boss = ArrayOptFirstElem(XQuery("for $elem in collaborators where $elem/id = "+plan.boss_id+" return $elem"));
 
 result = {
@@ -36,6 +40,7 @@ result = {
     pa_doc: pa_doc,
     plan: plan,
     plan_comments: plan_comments,
+    itog_score: itog_score,
     boss: {
         boss_id: String(boss.id),
         fullname: String(boss.fullname),
