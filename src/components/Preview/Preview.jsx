@@ -18,7 +18,7 @@ const Preview = (props) => {
             <NumParamsPanel score={props.arr_score}/>
 
             {props.plan_comments.length > 0 &&
-                <CommentsWidget comments={props.plan_comments}/>}
+                <CommentsWidget comments={props.plan_comments} plan_comments_instruction={props.plan_comments_instruction}/>}
             
             <ResultTable plan={props.plan} plan_pas={props.plan_pas} competence_scales={props.competence_scales} 
                 indicator_scales={props.indicator_scales} question_scales={props.question_scales}/>

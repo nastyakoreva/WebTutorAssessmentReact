@@ -48,7 +48,7 @@
 }
 
 .diamond {
-    background-image: url("data:image/svg+xml,%3Csvg class='svg-icon' style='width: 1em%3B height: 1em%3Bvertical-align: middle%3Bfill: currentColor%3Boverflow: hidden%3B' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M967.68 368.64l-153.6-204.8c-3.9424-5.2736-9.7792-8.8064-16.2816-9.8816l-307.2-51.2c-2.7648-0.4608-5.632-0.4608-8.3968 0l-307.2 51.2c-6.5024 1.0752-12.3392 4.608-16.2816 9.8816l-153.6 204.8c-7.3216 9.7792-6.7072 23.3984 1.4336 32.4608l460.8 512c4.864 5.376 11.776 8.4992 19.0464 8.4992s14.1824-3.072 19.0464-8.4992l460.8-512c8.192-9.1136 8.8064-22.6816 1.4336-32.4608zM654.6432 358.4l-168.2432 462.6944-168.2432-462.6944 336.4864 0zM343.3984 307.2l143.0016-143.0016 143.0016 143.0016-286.0032 0zM560.9984 166.4l189.3376 31.5392-63.1296 94.6688-126.2592-126.208zM285.5936 292.608l-63.1296-94.6688 189.3376-31.5392-126.208 126.208zM239.104 315.1872l-152.832 30.5664 91.6992-122.2656 61.1328 91.6992zM265.0624 362.24l152.2688 418.7648-342.6304-380.7232 190.3616-38.0928zM707.7376 362.24l190.3616 38.0928-342.6304 380.7232 152.2688-418.7648zM733.696 315.1872l61.1328-91.6992 91.6992 122.2656-152.832-30.5664z'/%3E%3C/svg%3E");
+    background-image: var(--svg_diamond);
     width: 24px;
     height: 24px;
     background-size: 24px 24px;
@@ -56,7 +56,7 @@
     background-position: center center;
 }
 .star {
-    background-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' standalone='no'%3F%3E%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 260 245'%3E%3Cpath d='m56 237 74-228 74 228L10 96h240'/%3E%3C/svg%3E");
+    background-image: var(--svg_star);
     width: 24px;
     height: 24px;
     background-size: 24px 24px;

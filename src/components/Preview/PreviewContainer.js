@@ -52,6 +52,7 @@ let mapStateToProps = (state) => {
         //workflow_states: state.preview.workflow?.state,
         plan: state.preview.plan,
         plan_comments: state.assessment.plan_comments,
+        plan_comments_instruction: state.assessment.plan_comments_instruction,
         arr_score: state.assessment.arr_score,
         plan_pas: state.preview.plan_pas,
         competence_scales: state.preview.competence_scales,

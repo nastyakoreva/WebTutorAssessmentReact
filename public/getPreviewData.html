@@ -9,6 +9,7 @@ Request.AddRespHeader( "Access-Control-Allow-Headers", "Access-Control-Allow-Hea
 
 plan_id = OptInt(Request.QueryString.GetOptProperty("plan_id"));
 plan = ArrayOptFirstElem(XQuery("for $elem in assessment_plans where $elem/id = "+plan_id+" return $elem"));
+
 if(plan != undefined) {
     plan_pas = XQuery("for $elem in pas where $elem/assessment_plan_id = "+plan.id+" return $elem");
 
@@ -97,8 +98,6 @@ if(plan != undefined) {
         }
     }
     personDoc = tools.open_doc(plan.person_id).TopElem;
-    result.person_tips = String(personDoc.custom_elems.ObtainChildByKey("Eval_TIPS").value);
-    result.person_hogan = String(personDoc.custom_elems.ObtainChildByKey("Eval_HOGAN").value);
 }
 else {
     result = {
@@ -107,9 +106,7 @@ else {
         plan_pas: [],
         competence_scales: [],
         indicator_scales: [],
-        question_scales: [],
-        person_tips: '',
-        person_hogan: '',
+        question_scales: []
     };
 }
 

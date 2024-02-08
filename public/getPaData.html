@@ -30,114 +30,148 @@ for(elem in plan_doc.custom_comments){
         workflow_state: wfStateName
     });
 }
-//заполняем поля для виджетов итоговой оценки 
-for (customElem in plan_doc.custom_elems.custom_elem) {
-    if(customElem.name=="post_develop_group" ) { 
-        descript = "--";     
-        itog_score = String(customElem.value);
-        switch (itog_score){
-            case 'III BR':
-            case 'III B': 
-                descript = 'Профессионал';
-                break;
-            case 'III AR':
-            case  'III A':
-                descript = 'Резерв';
-                break;
-            case 'II B':
-            case 'II A':
-                descript = 'Новички';
-                break;
-            case 'I B':
-                descript = 'Будущий проф.';
-                break;
-            case 'I A':
-                descript = 'Потенциал';
-                break;
-            case 'I':
-                descript = 'Группа контроля';
-                break;
-            default:
-                descript = 'Новички';
-                break;
-        }
-        arr_score.push({title: 'Группа развития',
-                        val: itog_score,
-                        desc: descript,
-                        order: 1});
+//заполняем поля для виджетов итоговой оценки
+arr_score_dir = [
+    { name: 'post_develop_group', title: 'Группа развития', order: 1 },
+    { name: 'assess_position', title: 'Соответствие', order: 2 },
+    { name: 'assess_result', title: 'Результативность', order: 3 },
+    { name: 'assess_potential', title: 'Потенциал', order: 4 },
+    { name: 'IQ', title: 'Оценка IQ', order: 5 },
+    { name: 'hogan', title: 'Hogan', order: 6 },
+];
+for(score_dir_item in arr_score_dir) {
+    curPaCustomElems = ArraySelect(plan_doc.custom_elems.custom_elem, "name == '"+score_dir_item.name+"'");
+    if(curPaCustomElems.length == 0) {
+        arr_score.push({title: score_dir_item.title,
+            val: null,
+            desc: 'нет данных',
+            date: null,
+            order: score_dir_item.order});
     }
-    if(customElem.name=="IQ" ) {
-        arr_score.push({title: 'Оценка IQ',
-        val: String(customElem.value),
-        order: 5
-       });
-    }
-    if(customElem.name=="hogan" ) {
-        arr_score.push({title: 'Hogan',
-        val: String(customElem.value),
-        order: 6
-       });
-    }		
-    if(customElem.name=="assess_position") {// оценка соотв должности
-        assesPosit = String(customElem.value);
-        descript = "--";
-        if (OptReal(assesPosit,0) <= 1.7)
-            descript = 'Зона роста';
-        else{
-            if (OptReal(assesPosit,0) <= 2.7 && OptReal(assesPosit,0) > 1.7)
-                descript = 'Частичное';
-                else{
-                    if (OptReal(assesPosit,0) > 2.7) 
-                        descript = 'Полное';
-                }
-        }
-        arr_score.push({title: 'Соответствие',
-                        val: assesPosit,
-                        desc: descript,
-                        order: 2
-                        });
-    }
-    if(customElem.name=="assess_result" ) {//оценка результативности
-        assesResult = String(customElem.value);
-        descript = "--";
-        if (OptReal(assesResult,0) == 1)
-            descript = 'Не результативен';
-            else{
-                if (OptReal(assesResult,0) == 2)
-                    descript = 'Результативен';
-                    else {
-                        if (OptReal(assesResult,0) == 3)
-                            descript = 'Выше ожиданий';
-                    }
+    else {
+        customElem = curPaCustomElems[0];
+        if(customElem.name=="post_develop_group" ) { 
+            itog_score = String(customElem.value);
+            switch (itog_score){
+                case 'III BR':
+                case 'III B': 
+                    descript = 'Профессионал';
+                    break;
+                case 'III AR':
+                case  'III A':
+                    descript = 'Резерв';
+                    break;
+                case 'II B':
+                case 'II A':
+                    descript = 'Новички';
+                    break;
+                case 'I B':
+                    descript = 'Будущий проф.';
+                    break;
+                case 'I A':
+                    descript = 'Потенциал';
+                    break;
+                case 'I':
+                    descript = 'Группа контроля';
+                    break;
+                default:
+                    descript = 'Новички';
+                    break;
             }
-        arr_score.push({title: 'Результативность',
-                        val: assesResult,
-                        desc: descript,
-                        order: 3
-                        });
-    }	
-    if(customElem.name=="assess_potential" ) {//оценка потенциала
-        assesPoten = String(customElem.value);
-        descript = "--";
-        if (OptReal(assesPoten,0) <= 1.7)
-            descript = 'Реализован';
-        else{
-            if (OptReal(assesPoten,0) <= 2.7 && OptReal(assesPoten,0) > 1.7)
-                descript = 'В должности';
-                else{
-                    if (OptReal(assesPoten,0) > 2.7) 
-                        descript = 'Потенциал';
+            arr_score.push({title: score_dir_item.title,
+                val: itog_score,
+                desc: descript,
+                date: null,
+                order: score_dir_item.order});
+        }
+        if(customElem.name=="assess_position") {// оценка соотв должности
+            assesPosit = String(customElem.value);
+            descript = 'нет данных';
+            if(assesPosit != '') {
+                assesPosit_num = OptReal(assesPosit, -1);
+                if (0 <= assesPosit_num && assesPosit_num <= 1.7)
+                    descript = 'Зона роста';
+                else {
+                    if (1.7 < assesPosit_num && assesPosit_num <= 2.7)
+                        descript = 'Частичное';
+                    else {
+                        if (2.7 < assesPosit_num) 
+                            descript = 'Полное';
+                        else
+                            descript = 'Не определен';
+                    }
                 }
-        }                                      
-        arr_score.push({title: 'Потенциал',
-                        val: assesPoten,
-                        desc: descript,
-                        order: 4
-                        });
-    }			
+            }
+            arr_score.push({title: score_dir_item.title,
+                val: assesPosit,
+                desc: descript,
+                date: null,
+                order: score_dir_item.order});
+        }
+        if(customElem.name=="assess_result" ) {//оценка результативности
+            assesResult = String(customElem.value);
+            assesResult_num = OptReal(assesResult, 0);
+            switch(assesResult_num) {
+                case 1: descript = 'Не результативен'; break;
+                case 2: descript = 'Результативен'; break;
+                case 3: descript = 'Выше ожиданий'; break;
+                default: descript = '-'; break;
+            }
+            arr_score.push({title: score_dir_item.title,
+                val: assesResult,
+                desc: descript,
+                date: null,
+                order: score_dir_item.order});
+        }
+        if(customElem.name=="assess_potential" ) {//оценка потенциала
+            assesPoten = String(customElem.value);
+            descript = 'нет данных';
+            if(assesPoten != '') {
+                assesPoten_num = OptReal(assesPoten, -1);
+                if (0 < assesPoten_num && assesPoten_num <= 1.7)
+                    descript = 'Реализован';
+                else {
+                    if (1.7 < assesPoten_num && assesPoten_num <= 2.7)
+                        descript = 'В должности';
+                    else {
+                        if (2.7 < assesPoten_num) 
+                            descript = 'Потенциал';
+                        else 
+                            descript = 'Не определен';
+                    }
+                }
+            }
+            arr_score.push({title: score_dir_item.title,
+                val: assesPoten,
+                desc: descript,
+                date: null,
+                order: score_dir_item.order});
+        }
+        if(customElem.name=="IQ" || customElem.name=="hogan") {
+            arr_score.push({title: score_dir_item.title,
+                val: String(customElem.value),
+                desc: null,
+                date: null,
+                order: score_dir_item.order});
+        }
+    }
 }
 
 boss = ArrayOptFirstElem(XQuery("for $elem in collaborators where $elem/id = "+plan.boss_id+" return $elem"));
+
+self_scores = {};
+if(pa_doc.status != 'self') {
+    filt = " and $elem/person_id = "+pa.person_id+" and $elem/expert_person_id = "+pa.person_id+" and $elem/assessment_appraise_type = '"+pa.assessment_appraise_type+"' and $elem/status = 'self'";
+    pa_self = ArrayOptFirstElem(XQuery("for $elem in pas where $elem/assessment_plan_id = " + plan.id + filt + " return $elem"));
+    if (pa_self != undefined) {
+        pa_self_doc = tools.open_doc(pa_self.id);
+        if(pa_self_doc != undefined) {
+            //alert('pa_self ' + tools.object_to_text( pa_self_doc.TopElem, "json" ));
+            self_scores['competences'] = pa_self_doc.TopElem.competences.competence,
+            self_scores['supplementary_questions'] = pa_self_doc.TopElem.supplementary_questions.supplementary_question,
+        }
+    }
+}
 
 result = {
     pa: pa,
@@ -145,6 +179,7 @@ result = {
     plan: plan,
     plan_comments: plan_comments,
     arr_score: ArraySort(arr_score, 'This.order', '+'),
+    self_scores: self_scores,
     boss: {
         boss_id: String(boss.id),
         fullname: String(boss.fullname),
@@ -247,6 +282,13 @@ switch (pa.assessment_appraise_type) {
         break;
 }
 result.instruction = (pa_type_instruction != undefined) ? String(pa_type_instruction.TopElem.text_area) : null;
+
+comments_instruction = null;
+if(plan_comments.length > 0) {
+    comments_instruction_doc = tools.open_doc(7324579894839891006); //TODO fix id
+    comments_instruction = comments_instruction_doc != undefined ? String(comments_instruction_doc.TopElem.text_area) : null;
+}
+result.plan_comments_instruction = comments_instruction;
 
 Response.Write(tools.object_to_text(result, 'json'));
 %>
