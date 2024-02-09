@@ -122,9 +122,9 @@ export const getAssessmentPa = (pa_id, updatePrew) => (dispatch) => {
 export const sendCompetence = (data) => (dispatch) => {
     //debugger;
     console.log(data);
-    console.log(data.attributes['role'].value);
+    console.log(data.attributes['mark_type'].value);
     let outputMessage = {};
-    if(data.attributes['role'].value === 'mark') {
+    if(data.attributes['mark_type'].value === 'mark') {
         outputMessage = {
             mode: "put",
             competence_mark: {
@@ -135,7 +135,7 @@ export const sendCompetence = (data) => (dispatch) => {
             }
         }
     }
-    if(data.attributes['role'].value === 'comment') {
+    if(data.attributes['mark_type'].value === 'comment') {
         outputMessage = {
             mode: "put",
             competence_comment: {
@@ -145,7 +145,7 @@ export const sendCompetence = (data) => (dispatch) => {
             }
         }
     }
-    if(data.attributes['role'].value === 'indicator_mark') {
+    if(data.attributes['mark_type'].value === 'indicator_mark') {
         outputMessage = {
             mode: "put",
             competence_indicator: {
@@ -158,7 +158,7 @@ export const sendCompetence = (data) => (dispatch) => {
             }
         }
     }
-    if(data.attributes['role'].value === 'question') {
+    if(data.attributes['mark_type'].value === 'question') {
         outputMessage = {
             mode: "put",
             question: {

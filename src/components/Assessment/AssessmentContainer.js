@@ -5,7 +5,7 @@ import {setAppCurentPaAC, updateAppPrewPa, setNextButtonSettingsAC} from "../../
 import {getAssessmentPa, sendCompetence} from "../../redux/assessment-reducer";
 import {getPreviewData} from "../../redux/preview-reducer";
 
-const pa_roadmap = ['competence_appraisal', 'position_appraisal', 'staffrating'/*, 'development_plan'*/]; //TODO маршрут оценки (типы pa для кнопки далее)
+const pa_roadmap = ['competence_appraisal', 'position_appraisal', 'staffrating']; //маршрут оценки (типы pa для кнопки далее)
 const getPaNextButton = (state) => {
     const cur_pa = state.tree.pas.find(p => p.id === state.app.current_pa);
     const pa_roadmap_index = pa_roadmap.indexOf(cur_pa.type);
@@ -24,8 +24,7 @@ const getPaNextButton = (state) => {
 const getPaTypeName = (state) => {
     const paTypeNames = [{type: 'competence_appraisal', name: 'Оценка по компетенциям'},
                         {type: 'position_appraisal', name: 'Оценка потенциала'}, 
-                        {type: 'staffrating', name: 'Оценка результативности'},
-                        {type: 'development_plan', name: 'Оценка 4'}];
+                        {type: 'staffrating', name: 'Оценка результативности'}];
     const paTypeName = paTypeNames.find(x => x.type === state.tree.pas.find(p => p.id === state.app.current_pa).type);
     return paTypeName !== undefined ? paTypeName.name : '';
 }
@@ -49,7 +48,8 @@ let mapStateToProps = (state) => {
         pa_id_next: getPaNextButton(state),
         pa_type_title: getPaTypeName(state),
         instruction: state.assessment.instruction,
-        plan_id: state.assessment.pa_doc.assessment_plan_id
+        plan_id: state.assessment.pa_doc.assessment_plan_id,
+        self_scores: state.assessment.self_scores
     }
 }
 

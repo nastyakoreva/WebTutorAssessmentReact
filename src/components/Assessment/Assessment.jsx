@@ -12,22 +12,30 @@ const Assessment = (props) => {
     let haveCommentsErr = false;
 
     const competences = props.pa_doc.competences.competence !== undefined &&
-    props.pa_doc.competences.competence.filter(c => c.indicators.indicator === undefined).map(comp =>
-        {
+    props.pa_doc.competences.competence.filter(c => c.indicators.indicator === undefined).map(comp => {
             if (!haveCommentsErr) {
                 haveCommentsErr = (comp.mark_text === '0' || comp.mark_text === '1') && comp.comment === '';
             }
+            let self_score = props.self_scores.competences != null 
+                ? props.self_scores.competences.competence.find(s => s.competence_id === comp.competence_id) : null;
         return <CompetenceWidget competence={comp} pa_doc={props.pa_doc} sendCompetence={props.sendCompetence}
-            competence_scale={props.competence_scales.find(x => x.id === comp.competence_id)} />})  
+            competence_scale={props.competence_scales.find(x => x.id === comp.competence_id)} self_score={self_score}/>})
+    
     
     const competence_indicators = props.pa_doc.competences.competence !== undefined &&
-        props.pa_doc.competences.competence.filter(c => c.indicators.indicator !== undefined).map(x =>
-        <CompetenceWithIndicatorWiget competence_id={x.competence_id} indicators={x.indicators.indicator} pa_doc={props.pa_doc}
-            indicator_scales={props.indicator_scales} sendCompetence={props.sendCompetence}/>);
+        props.pa_doc.competences.competence.filter(c => c.indicators.indicator !== undefined).map(x => {
+            let self_score = props.self_scores.competences != null
+                ? props.self_scores.competences.competence.find(s => s.competence_id === x.competence_id) : null;
+        return <CompetenceWithIndicatorWiget competence_id={x.competence_id} indicators={x.indicators.indicator} pa_doc={props.pa_doc}
+            indicator_scales={props.indicator_scales} sendCompetence={props.sendCompetence} self_score={self_score}/>});
 
-    const questions = props.pa_doc.supplementary_questions.supplementary_question?.map(quest => 
-        <QuestionWidget question={quest} pa_doc={props.pa_doc} sendCompetence={props.sendCompetence}
-            question_scale={props.question_scales.find(x => x.id === quest.supplementary_question_id)}/>)
+    
+    const questions = props.pa_doc.supplementary_questions.supplementary_question?.map(quest => {
+        let self_score = props.self_scores.supplementary_questions != null 
+        ? props.self_scores.supplementary_questions.supplementary_question.find(q => q.supplementary_question_id === quest.supplementary_question_id) : null;
+        return <QuestionWidget question={quest} pa_doc={props.pa_doc} sendCompetence={props.sendCompetence}
+            question_scale={props.question_scales.find(x => x.id === quest.supplementary_question_id)} self_score={self_score}/>});
+    
     
     let haveCompetenceNull = false;
     if(props.pa_doc.competences.competence !== undefined) {

@@ -7,12 +7,20 @@
     background-color: #dde1e6;
     margin: 5px 0;
     .header {
+        display: flex;
+        flex-direction: row;
         color: #262d30;
         font-weight: bold;
         border-radius: 10px;
         overflow: hidden;
         padding: 10px 15px;
         margin: 10px;
+        .left {
+            width: 80%;
+        }
+        .right {
+            width: 20%;
+        }
     }
     .content {
         background-color: #ffffff;

@@ -10,7 +10,7 @@ const Header = (props) => {
                 <div className={css.assessment_name}>
                     {props.assessment_name}. период оценки: {props.assessment_date_start} - {props.assessment_date_end}</div>
                 <img className={css.assessment_user} src={props.assessment_user.pict_url} title={props.assessment_user.fullname}
-                    onClick={()=>{window.location.href='/cabinet'}}/>
+                    onClick={()=>{window.location.href='/cabinet'}} alt=''/>
             </div>}
         </div>
     )
