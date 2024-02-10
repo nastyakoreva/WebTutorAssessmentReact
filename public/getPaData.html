@@ -268,16 +268,16 @@ result.question_scales = question_scales;
 pa_type_instruction = undefined;
 switch (pa.assessment_appraise_type) {
     case 'competence_appraisal':
-        pa_type_instruction = tools.open_doc(7324579894839891006);
+        pa_type_instruction = tools.open_doc(7317921440225316503);
         break;
     case 'position_appraisal':
-        pa_type_instruction = tools.open_doc(7324579894839891006); //TODO fix id
+        pa_type_instruction = tools.open_doc(7333543045040007797); 
         break;
     case 'staffrating':
-        pa_type_instruction = tools.open_doc(7324579894839891006); //TODO fix id
+        pa_type_instruction = tools.open_doc(7333542529153065709); 
         break;
     case 'development_plan':
-        pa_type_instruction = tools.open_doc(7324579894839891006); //TODO fix id
+        pa_type_instruction = tools.open_doc(7324579894839891006); 
     default:
         break;
 }
@@ -285,7 +285,7 @@ result.instruction = (pa_type_instruction != undefined) ? String(pa_type_instruc
 
 comments_instruction = null;
 if(plan_comments.length > 0) {
-    comments_instruction_doc = tools.open_doc(7324579894839891006); //TODO fix id
+    comments_instruction_doc = tools.open_doc(7333541404153707810); 
     comments_instruction = comments_instruction_doc != undefined ? String(comments_instruction_doc.TopElem.text_area) : null;
 }
 result.plan_comments_instruction = comments_instruction;
