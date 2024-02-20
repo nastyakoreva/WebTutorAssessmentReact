@@ -3,7 +3,7 @@ import css from "./TreeItem.module.css"
 
 const TreeItem = (props) => {
     let pict_url = props.item.pa.icon_url ? props.item.pa.icon_url : '/download_file.html?file_id=6962198780573603416';
-
+    console.log(props)
     const onClickHandler = () => {
         if(props.item.to === 'preview') {
             props.getPa(props.item.pa.id);

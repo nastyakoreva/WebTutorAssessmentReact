@@ -59,7 +59,7 @@ let mapStateToProps = (state) => {
         instructionContent: state.tree.instructionContent,
         pas_tree: pas_tree,
         assessment_user: state.tree.assessment_user,
-        pas:state.tree.pas
+        pas: state.tree.pas
     }
 }
 let mapDispatchToProps = (dispatch) => {

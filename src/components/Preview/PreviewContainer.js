@@ -35,6 +35,7 @@ const getPaTypeName = (state) => {
 let mapStateToProps = (state) => {
 
     return {
+        mode: state.app.current_pa,
         pa: state.assessment.pa,
         //pa_doc: state.assessment.pa_doc,
         //plan: state.assessment.plan,
@@ -59,7 +60,9 @@ let mapStateToProps = (state) => {
         indicator_scales: state.preview.indicator_scales,
         question_scales: state.preview.question_scales,
         curUserId: state.tree.assessment_user.id,
-        pa_curr_expert_id: state.assessment.pa.expert_person_id
+        pa_curr_expert_id: state.assessment.pa.expert_person_id,
+        next_enabled: state.app.current_pa === 'pre_preview' ? true : false,
+        pa_id_next: state.app.current_pa === 'pre_preview' ? state.assessment.pa.id : '',
 
     }
 }
@@ -69,12 +72,16 @@ let mapDispatchToProps = (dispatch, ownProps) => {
     return {
         backToTree: () => { dispatch(setAppCurentPaAC('tree')) },
         goPrewPa:()=>{
-            let lastInPrew_pa = ownProps.prew_pa[ownProps.prew_pa.length-1];
-            dispatch(updateAppPrewPa());
-            dispatch(getAssessmentPa(lastInPrew_pa, false));
+            const lastInPrew_pa = ownProps.prew_pa[ownProps.prew_pa.length-1];
+            if(lastInPrew_pa === 'tree')
+                dispatch(setAppCurentPaAC('tree'));
+            else {
+                dispatch(updateAppPrewPa());
+                dispatch(getAssessmentPa(lastInPrew_pa, false));
+            }
         },
-        sendWFstate: (data) => { dispatch(sendWFstate(data)) }
-        //goNextPa: (pa_id, plan_id) => { pa_id === 'preview' ? dispatch(getPreviewData(plan_id)) : dispatch(getAssessmentPa(pa_id, true))},
+        sendWFstate: (data) => { dispatch(sendWFstate(data)) },
+        goNextPa: (pa_id) => { dispatch(getAssessmentPa(pa_id, true)) },
         //sendCompetence: (data) => { dispatch(sendCompetence(data)) }*/
     }
 }

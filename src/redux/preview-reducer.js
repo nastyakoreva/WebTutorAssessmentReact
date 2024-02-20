@@ -35,11 +35,16 @@ const previewReducer = (state = initialState, action) => {
 const setPreview = (data) => ({ type: SET_PREVIEW, data });
 //const setAssessmentCompetence = (data) => ({ type: SET_ASSESSMENT_COMPETENCE, data });
 
-export const getPreviewData = (plan_id) => (dispatch) => {
+export const getPreviewData = (plan_id, mode) => (dispatch) => {
     assessmentAPI.getPreviewData(plan_id).then(response => {
         console.log(response);
         dispatch(setPreview(response.data))
-    }).then( () => { dispatch(setAppCurentPaAC('preview', true)) } ) 
+    }).then( () => { 
+        if(mode === 'pre_preview')
+            dispatch(setAppCurentPaAC('pre_preview', true));
+        else
+            dispatch(setAppCurentPaAC('preview', true)) 
+    } ) 
 }
 
 export const sendWFstate = (data) => (dispatch, getState) => {

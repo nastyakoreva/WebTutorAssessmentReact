@@ -58,14 +58,20 @@ let mapDispatchToProps = (dispatch, ownProps) => {
     return {
         backToTree: () => { dispatch(setAppCurentPaAC('tree')) },
         goPrewPa: () => {
-            if(ownProps.prew_pa.length>0){
-                let lastInPrew_pa = ownProps.prew_pa[ownProps.prew_pa.length - 1]
-                if(lastInPrew_pa === 'tree'){
-                    dispatch(setAppCurentPaAC('tree'))
-                }else{
-
-                    dispatch(updateAppPrewPa())
-                    dispatch(getAssessmentPa(lastInPrew_pa, false))
+            if(ownProps.prew_pa.length>0) {
+                let lastInPrew_pa = ownProps.prew_pa[ownProps.prew_pa.length - 1];
+                if(lastInPrew_pa === 'tree') {
+                    dispatch(setAppCurentPaAC('tree'));
+                }
+                else {
+                    if(lastInPrew_pa === 'pre_preview') {
+                        dispatch(updateAppPrewPa());
+                        dispatch(setAppCurentPaAC('pre_preview'));
+                    }
+                    else {
+                        dispatch(updateAppPrewPa());
+                        dispatch(getAssessmentPa(lastInPrew_pa, false));
+                    }
                 }
             }
 

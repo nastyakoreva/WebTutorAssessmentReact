@@ -12,8 +12,14 @@ const Preview = (props) => {
     return (
         <div className={css.preview}>
             <WorkflowWiget workflow_states={props.workflow_states} pa={props.pa} boss={props.boss} expert={props.expert} hr={props.hr}/>
+            
+            {props.mode === 'pre_preview' && 
+            <WfButtonsPanel backToTree={props.backToTree} goNextPa={props.goNextPa} goPrewPa={props.goPrewPa} pa_id_next={props.pa_id_next} 
+            plan_id={props.plan_id} next_enabled={props.next_enabled} next_title = {props.next_title}/>}
+            
+            {props.mode === 'preview' && 
             <WfButtonsPanel backToTree={props.backToTree} goPrewPa={props.goPrewPa} plan={props.plan} curUserId={props.curUserId} 
-                hr={props.hr} sendWFstate={props.sendWFstate} pa_curr_expert_id={props.pa_curr_expert_id}/>
+                hr={props.hr} sendWFstate={props.sendWFstate} pa_curr_expert_id={props.pa_curr_expert_id}/>}
             
             <NumParamsPanel score={props.arr_score}/>
 

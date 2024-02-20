@@ -1,47 +1,82 @@
-import React, { useCallback } from "react";
-import css from "./ResultTable.module.css"
-import { ResultTableHeader } from "./TableHeader/ResultTableHeader";
-import {ResultTableContent} from "./ResultTableContent/ResultTableContent"
-import {getCompetenceAppraisal} from "../../../helpers/getTableContentData"
-const ResultTable = ({plan, plan_pas,competence_scales,indicator_scales,question_scales,...props}) => {
-    let isHasBoss = plan.workflow_state === "Assessment"?true:true
-    let competenceAppraisal = useCallback(()=>{
-        // getCompetenceAppraisal(plan, plan_pas,competence_scales,indicator_scales,question_scales)
-    },[plan, plan_pas,competence_scales,indicator_scales,question_scales]) 
+import React from "react";
+import css from "./ResultTable.module.css";
+import { ResultTableHeader } from "./ResultTableHeader/ResultTableHeader";
+import { ResultTableContent } from "./ResultTableContent/ResultTableContent";
+
+const ResultTable = ({plan, plan_pas,competence_scales,indicator_scales,question_scales}) => {
+
+    let isHasBoss = plan.workflow_state === "Assessment" ? false : true;
+    let data = [];
+
+    const pas1 = plan_pas.find(p => p.assessment_appraise_type === 'competence_appraisal' && p.status === 'self');
+    if(pas1 !== undefined) {
+        const pas1Boss = plan_pas.find(p => p.assessment_appraise_type === 'competence_appraisal' && p.status === 'manager');
+
+        for(let comp of pas1.competences.competence) {
+            let comp_name = competence_scales.find(s => s.id === comp.competence_id)?.name;
+            
+            let item = { isTopLevel: true, name: comp_name, score: comp.mark_text, comment: comp.comment };
+            if(isHasBoss) {
+                let comp_boss = pas1Boss?.competences.competence.find(c => c.competence_id === comp.competence_id);
+                item.bossScore = comp_boss?.mark_text;
+                item.bossComment = comp_boss?.comment;
+            }
+            data.push(item);
+        }
+    }
+
+    const pas2 = plan_pas.find(p => p.assessment_appraise_type === 'position_appraisal' && p.status === 'self');
+    if(pas2 !== undefined) {
+        const pas2Boss = plan_pas.find(p => p.assessment_appraise_type === 'position_appraisal' && p.status === 'manager');
+
+        for(let comp of pas2.competences.competence) {
+            let comp_name = indicator_scales.find(s => s.competence_id === comp.competence_id)?.competence_name;
+            let item = { isTopLevel: true, name: comp_name, score: comp.mark_text, comment: comp.comment };
+            if(isHasBoss) {
+                let comp_boss = pas2Boss?.competences.competence.find(c => c.competence_id === comp.competence_id);
+                item.bossScore = comp_boss?.mark_text;
+                item.bossComment = comp_boss?.comment;
+            }
+            data.push(item);
+
+            for(let indic of comp.indicators.indicator) {
+                let indic_name = indicator_scales.find(s => s.id === indic.indicator_id)?.name;
+                item = { isTopLevel: false, name: indic_name, score: indic.mark_text, comment: indic.comment };
+                if(isHasBoss) {
+                    let indic_boss = pas2Boss?.competences.competence.find(c => c.competence_id === comp.competence_id)?.indicators.indicator.find(i => i.indicator_id === indic.indicator_id);
+                    item.bossScore = indic_boss?.mark_text;
+                    item.bossComment = indic_boss?.comment;
+                }
+                data.push(item);
+            }
+        }
+    }
+
+    const pas3 = plan_pas.find(p => p.assessment_appraise_type === 'staffrating' && p.status === 'self');
+    if(pas3 !== undefined) {
+        const pas3Boss = plan_pas.find(p => p.assessment_appraise_type === 'staffrating' && p.status === 'manager');
+
+        for(let quest of pas3.supplementary_questions.supplementary_question) {
+            let q_scale = question_scales.find(s => s.id === quest.supplementary_question_id);
+            let quest_name = quest.supplementary_question_name;
+            let quest_score = q_scale?.scales.scale.find(s => s.id === quest.supplementary_question_mark)?.percent;
+            
+            let item = { isTopLevel: true, name: quest_name, score: quest_score, comment: '' };
+            if(isHasBoss) {
+                let quest_boss = pas3Boss?.supplementary_questions.supplementary_question.find(q => q.supplementary_question_id === quest.supplementary_question_id);
+                item.bossScore = q_scale?.scales.scale.find(s => s.id === quest_boss.supplementary_question_mark)?.percent;
+                item.bossComment = '';
+            }
+            data.push(item);
+        }
+    }
+
     return (
         <div className={css.tableContainer}>
            <ResultTableHeader isHasBoss={isHasBoss}/>
-           <ResultTableContent isHasBoss={isHasBoss}/>
+           <ResultTableContent isHasBoss={isHasBoss} data={data}/>
         </div>
     )
 }
 
 export default ResultTable;
-/* TODO отрисовать таблицу результатов согласно макету, компонента ResultTable
-const paTypeNames = [{type: 'competence_appraisal', name: 'Оценка по компетенциям'},
-                        {type: 'position_appraisal', name: 'Оценка потенциала'}, 
-                        {type: 'staffrating', name: 'Оценка результативности'},
-                        {type: 'development_plan', name: 'Оценка 4'}];
-    const paTypeName = paTypeNames.find(x => x.type === state.tree.pas.find(p => p.id === state.app.current_pa).type);
-    return paTypeName !== undefined ? paTypeName.name : '';
-    
-3 "Соответствие должности", "Потенциал", "Результативность" - вычисляются из типа оценки (props.plan_pas.assessment_appraise_type),
-функцию вычисления можно скопировать из AssessmentContainer.getPaTypeName,
-либо вынести и использовать в нескольких местах, по усмотрению.
-Поле "балл" для этих строк считается как среднее арифметическое баллов PA этого типа оценки (props.plan_pas.filter(assessment_appraise_type)) 
-
-4 значения строки (название, балл, коммент) берем из:
-4.1 если plan_pas.assessment_appraise_type == 'competence_appraisal', данные для таблицы в plan_pas.competences
-балл в mark_value, коммент в comment
-название ищем в competence_scales по competence_scales.id == plan_pas.competences.competence_id
-
-4.2 если plan_pas.assessment_appraise_type == 'position_appraisal', данные для таблицы в plan_pas.competences.indicators
-балл в mark_value, коммент в comment
-название ищем в indicator_scales по indicator_scales.id == plan_pas.competences.indicator_id
-
-4.3 если plan_pas.assessment_appraise_type == 'staffrating', данные для таблицы в plan_pas.supplementary_questions
-название в supplementary_question_name
-балл - по ид вопроса и значению mark ищем в question_scales.scale, берем поле percent
-коммент всегда ""
-
-*/

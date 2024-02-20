@@ -1,5 +1,6 @@
 import {assessmentAPI} from "../api/api";
 import {setAppCurentPaAC} from "./app-reducer";
+import { getPreviewData } from "./preview-reducer";
 
 const SET_ASSESSMENT_PA = 'SET_ASSESSMENT_PA';
 const SET_ASSESSMENT_COMPETENCE = 'SET_ASSESSMENT_COMPETENCE';
@@ -112,11 +113,20 @@ const assessmentReducer = (state = initialState, action) => {
 const setAssessmentPa = (data) => ({ type: SET_ASSESSMENT_PA, data });
 const setAssessmentCompetence = (data) => ({ type: SET_ASSESSMENT_COMPETENCE, data });
 
-export const getAssessmentPa = (pa_id, updatePrew) => (dispatch) => {
+export const getAssessmentPa = (pa_id, updatePrew) => (dispatch, getState) => {
+    const state = getState();
+    let resp = null;
     assessmentAPI.getPaData(pa_id).then(response => {
-        console.log(response);
+        resp = response?.data;
         dispatch(setAssessmentPa(response.data))
-    }).then( () => { dispatch(setAppCurentPaAC(pa_id, updatePrew)) } ) 
+    }).then( () => {
+        if(resp && resp.plan_comments.length > 0 && state.app.current_pa === 'tree') {
+            dispatch(getPreviewData(resp.pa.assessment_plan_id, 'pre_preview'));
+            //dispatch(setAppCurentPaAC('pre_preview', updatePrew));
+        }
+        else
+            dispatch(setAppCurentPaAC(pa_id, updatePrew));
+    } ) 
 }
 
 export const sendCompetence = (data) => (dispatch) => {

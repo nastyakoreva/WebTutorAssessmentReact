@@ -29,7 +29,9 @@ class App extends React.Component {
                       assessment_date_end={this.props.assessment_date_end}
                       assessment_user={this.props.assessment_user}/>
               {this.props.current_pa === 'tree' && <TreeContainer/>}
-              {this.props.current_pa !== null && this.props.current_pa !== 'tree' && this.props.current_pa !== 'preview' && <AssessmentContainer {...this.props}/>}
+              {this.props.current_pa !== null && this.props.current_pa !== 'tree' && this.props.current_pa !== 'preview' 
+                && this.props.current_pa !== 'pre_preview' && <AssessmentContainer {...this.props}/>}
+              {this.props.current_pa === 'pre_preview' && <PreviewContainer {...this.props}/>}
               {this.props.current_pa === 'preview' && <PreviewContainer {...this.props}/>}
           </div>
       )
